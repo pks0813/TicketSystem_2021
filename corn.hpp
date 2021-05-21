@@ -100,7 +100,7 @@ class Corn{
     int Usernumber=0;
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
-            TrainTimeBPT("TrainTimeBPT.in"),Userpool("Userpool.in",1000),Trainpool("Trainpool.in",300),Orderpool("Orderpool.in",1000),Useronline(200009),MPS(10007)
+            TrainTimeBPT("TrainTimeBPT.in"),Userpool("Userpool.in",1000),Trainpool("Trainpool.in",500),Orderpool("Orderpool.in",1000),Useronline(200009),MPS(10007)
         {
             std::fstream info;
             std::string X="Useless.in";
@@ -340,6 +340,8 @@ class Corn{
         {          
             TrainInfo CurTrain;
             Trainpool.Copy(TrainVec[i],CurTrain);
+
+            Ticket now;
             int Snum=-1;
             for (int j=0;j<CurTrain.StationNum;j++)
                 if (xiangdeng(Sname,CurTrain.Station[j])==1)
@@ -348,7 +350,6 @@ class Corn{
                     break;
                 }
             if (Snum==-1 || Snum==CurTrain.StationNum-1) continue;
-            Ticket now;
             now.SDate=ArriveTime(CurTrain,Snum)+CurTrain.Stoptime[Snum];
             now.price=0;now.time=0;
             strcpy(now.Sname,Sname);
@@ -403,6 +404,7 @@ class Corn{
         TrainInfoTvec.resize(TTrainVec.size());
         for (int i=0;i<(int)(TTrainVec.size());i++)
             Trainpool.Copy(TTrainVec[i],TrainInfoTvec[i]);
+        int ansTrain1,ansTrain2,ansS1,ansS2,ansT1,ansT2,ansDay1,ansDay2;
         for (int i=0;i<(int)(STrainVec.size());i++)
         {
             MPS.clean();
@@ -464,24 +466,33 @@ class Corn{
                     if (Chanflat)
                     {
                         ansTimesum=nowTimesum;ansTime1=nowTime1;ansPrice=nowPrice;
-                        strcpy(Bestans.first.TrainID,CurTrain.TrainID);
-                        strcpy(Bestans.second.TrainID,CurArriveTrain.TrainID);
-                        Bestans.first.SDate=NowDate;Bestans.first.TDate=FirstDate;
-                        Bestans.second.SDate=ActualStartDay;Bestans.second.TDate=ActualArriveDay;
-                        strcpy(Bestans.first.Sname,CurTrain.Station[Snum]);
-                        strcpy(Bestans.first.Tname,CurTrain.Station[Miditer.second.first]);
-                        strcpy(Bestans.second.Sname,CurTrain.Station[Miditer.second.first]);
-                        strcpy(Bestans.second.Tname,CurArriveTrain.Station[Tnum]);
-                        Bestans.first.price=CurTrain.Pricepre[Miditer.second.first]-CurTrain.Pricepre[Snum];
-                        Bestans.second.price=CurArriveTrain.Pricepre[Tnum]-CurArriveTrain.Pricepre[k];
-                        Bestans.first.Seatmax=inf;Bestans.second.Seatmax=inf;
-                        for (int l=Snum;l<Miditer.second.first;l++) Bestans.first.Seatmax=min(Bestans.first.Seatmax,CurTrain.Seat[Neday][l]);
-                        for (int l=k;l<Tnum;l++) Bestans.second.Seatmax=min(Bestans.second.Seatmax,CurArriveTrain.Seat[SecondDay][l]);
+                        ansTrain1=i;ansS1=Snum;ansT1=Miditer.second.first;ansTrain2=j;ansS2=k;ansT2=Tnum;
+                        ansDay1=Neday;                        ansDay2=SecondDay;
+                    }
                     }   
                 }
             }
-        }
-        if (ansPrice<inf){SC(Bestans.first);SC(Bestans.second);}
+        if (ansPrice<inf){
+                TrainInfo CurTrain;
+                Trainpool.Copy(STrainVec[ansTrain1],CurTrain);
+                TrainInfo CurArriveTrain;
+                Trainpool.Copy(TTrainVec[ansTrain2],CurArriveTrain);
+                
+                strcpy(Bestans.first.TrainID,CurTrain.TrainID);
+                strcpy(Bestans.second.TrainID,CurArriveTrain.TrainID);
+                Bestans.first.SDate=ArriveTime(CurTrain,ansS1)+(ansDay1*1440+CurTrain.Stoptime[ansS1]);Bestans.first.TDate=ArriveTime(CurTrain,ansT1)+(ansDay1*1440);
+                Bestans.second.SDate=ArriveTime(CurArriveTrain,ansS2)+(ansDay2*1440+CurTrain.Stoptime[ansS2]);Bestans.second.TDate=ArriveTime(CurArriveTrain,ansT2)+(ansDay2*1440);
+                strcpy(Bestans.first.Sname,CurTrain.Station[ansS1]);
+                strcpy(Bestans.first.Tname,CurTrain.Station[ansT1]);
+                strcpy(Bestans.second.Sname,CurArriveTrain.Station[ansS2]);
+                strcpy(Bestans.second.Tname,CurArriveTrain.Station[ansT2]);
+                Bestans.first.price=CurTrain.Pricepre[ansT1]-CurTrain.Pricepre[ansS1];
+                Bestans.second.price=CurArriveTrain.Pricepre[ansT2]-CurArriveTrain.Pricepre[ansS2];
+                Bestans.first.Seatmax=inf;Bestans.second.Seatmax=inf;
+                for (int l=ansS1;l<ansT1;l++) Bestans.first.Seatmax=min(Bestans.first.Seatmax,CurTrain.Seat[ansDay1][l]);
+                for (int l=ansS2;l<ansT2;l++) Bestans.second.Seatmax=min(Bestans.second.Seatmax,CurArriveTrain.Seat[ansDay2][l]);
+                SC(Bestans.first);SC(Bestans.second);
+            }
         else printf("0\n");
     }
 
@@ -624,8 +635,9 @@ class Corn{
         UserBPT.clean();TrainBPT.clean();StationTrainBPT.clean();UserTimeBPT.clean();TrainTimeBPT.clean();
         Ordertime=0;Usernumber=0;
     }
-
+    std::map<std::string,long long> MP;
     void game(){
+        int last=clock();
         std::string S;
         while (1){
             // printf("%d   ",++timeID);
@@ -648,7 +660,13 @@ class Corn{
             if (tmp[0]=="query_order"){query_order(tmp);}
             if (tmp[0]=="refund_ticket"){refund_ticket(tmp);}
             if (tmp[0]=="clean"){clean();}
-            if (tmp[0]=="exit"){printf("bye\n");return;}
+            if (tmp[0]=="exit"){printf("bye\n");
+                for (auto i=MP.begin();i!=MP.end();i++)
+                    std::cerr<<i->first<<' '<<i->second<<std::endl;
+            return;}
+            int now=clock();
+            MP[tmp[0]]=MP[tmp[0]]+now-last;
+            last=now;
             }
         }
 };

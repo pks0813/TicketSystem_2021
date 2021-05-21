@@ -3,7 +3,7 @@
 #include"include.hpp"
 
 
-
+int CI=0;
 template<class T>
 class QQHash{// long long->T
     public:
@@ -134,6 +134,7 @@ void StoragePool<T>::Erase(const int &id){
 template<typename T> 
 void StoragePool<T>::InsideRewrite(const int &id,const T &X)
 {
+    CI++;
     info.seekp(Offset+id*Blsize);
     info.write(reinterpret_cast<const char *> (&X),sizeof(T));
 } 
@@ -209,11 +210,14 @@ StoragePool<T>::~StoragePool(){
     for (int i=0;i<Indoor;i++)
     if (index[i]!=-1)
         InsideRewrite(index[i],Storage[i]);
+    delete []index;
+    delete []Storage;
     info.seekp(0);
     info.write(reinterpret_cast<char *> (&cnt),sizeof(int));
     info.write(reinterpret_cast<char *> (&FirstFail),sizeof(int));  
     info.write(reinterpret_cast<char *> (&BPTint),sizeof(int)); 
     info.close();
+    std::cerr<<CI<<std::endl;
 }
 
 
