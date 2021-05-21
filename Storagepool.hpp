@@ -217,7 +217,7 @@ StoragePool<T>::~StoragePool(){
     info.write(reinterpret_cast<char *> (&FirstFail),sizeof(int));  
     info.write(reinterpret_cast<char *> (&BPTint),sizeof(int)); 
     info.close();
-    std::cerr<<CI<<std::endl;
+    // std::cerr<<CI<<std::endl;
 }
 
 

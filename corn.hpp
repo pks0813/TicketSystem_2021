@@ -664,7 +664,7 @@ class Corn{
     }
     std::map<std::string,long long> MP;
     void game(){
-        int last=clock();
+        // int last=clock();
         std::string S;
         while (1){
             // printf("%d   ",++timeID);
@@ -687,13 +687,13 @@ class Corn{
             if (tmp[0]=="query_order"){query_order(tmp);}
             if (tmp[0]=="refund_ticket"){refund_ticket(tmp);}
             if (tmp[0]=="clean"){clean();}
-            if (tmp[0]=="exit"){printf("bye\n");
+            if (tmp[0]=="exit"){printf("bye\n");/*
                 for (auto i=MP.begin();i!=MP.end();i++)
-                    std::cerr<<i->first<<' '<<i->second<<std::endl;
+                    std::cerr<<i->first<<' '<<i->second<<std::endl;*/
             return;}
-            int now=clock();
-            MP[tmp[0]]=MP[tmp[0]]+now-last;
-            last=now;
+            // int now=clock();
+            // MP[tmp[0]]=MP[tmp[0]]+now-last;
+            // last=now;
             }
         }
 };
