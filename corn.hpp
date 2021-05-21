@@ -499,7 +499,7 @@ class Corn{
                 strcpy(Bestans.first.TrainID,CurTrain.TrainID);
                 strcpy(Bestans.second.TrainID,CurArriveTrain.TrainID);
                 Bestans.first.SDate=ArriveTime(CurTrain,ansS1)+(ansDay1*1440+CurTrain.Stoptime[ansS1]);Bestans.first.TDate=ArriveTime(CurTrain,ansT1)+(ansDay1*1440);
-                Bestans.second.SDate=ArriveTime(CurArriveTrain,ansS2)+(ansDay2*1440+CurTrain.Stoptime[ansS2]);Bestans.second.TDate=ArriveTime(CurArriveTrain,ansT2)+(ansDay2*1440);
+                Bestans.second.SDate=ArriveTime(CurArriveTrain,ansS2)+(ansDay2*1440+CurArriveTrain.Stoptime[ansS2]);Bestans.second.TDate=ArriveTime(CurArriveTrain,ansT2)+(ansDay2*1440);
                 strcpy(Bestans.first.Sname,CurTrain.Station[ansS1]);
                 strcpy(Bestans.first.Tname,CurTrain.Station[ansT1]);
                 strcpy(Bestans.second.Sname,CurArriveTrain.Station[ansS2]);

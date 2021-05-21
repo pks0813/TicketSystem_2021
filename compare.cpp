@@ -6,11 +6,11 @@ int main()
 {
 	string t,ans,ans2;
 	int i;
-	freopen("2.out","r",stdin);
+	freopen("3.out","r",stdin);
 	char c;
 	while(scanf("%c",&c)!=EOF) ans+=c;
 	fclose(stdin);
-	freopen("ans2.out","r",stdin);
+	freopen("ans3.out","r",stdin);
 	while(scanf("%c",&c)!=EOF) ans2+=c;
 	fclose(stdin);
     printf("%d %d\n",ans.size(),ans2.size());
