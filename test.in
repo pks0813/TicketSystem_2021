@@ -1,0 +1,16 @@
+add_train -i Train1 -n 3 -m 5 -s A|B|C -p 10|20 -x 23:59 -t 10|20 -o 6 -d 06-26|06-27 -y P
+release_train -i Train1
+add_user -c cur -u pks -p awsl -n 奥斯卡 -m foo@bar.com -g 10
+login -u pks -p awsl
+add_user -c pks -u wz -p awsl -n 奥斯卡 -m foo@bar.com -g 8
+login -u wz -p awsl
+buy_ticket -u pks -i Train1 -d 06-26 -n 4 -f A -t C
+buy_ticket -u pks -i Train1 -d 06-27 -n 5 -f B -t C -q true
+buy_ticket -u wz -i Train1 -d 06-26 -n 4 -f A -t C -q true
+query_order -u pks
+query_order -u wz
+refund_ticket -u pks -n 2
+refund_ticket -u pks -n 1
+query_order -u pks
+query_order -u wz
+exit

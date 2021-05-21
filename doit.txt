@@ -1,0 +1,14 @@
+make
+time ./code <1.in >1.out
+time ./code <2.in >2.out
+time ./code <3.in >3.out
+time ./code <4.in >4.out
+time ./code <5.in >5.out
+time ./code <6.in >6.out
+time ./code <7.in >7.out
+time ./code <8.in >8.out
+time ./code <9.in >9.out
+time ./code <10.in >10.out
+time ./code <11.in >11.out
+./compare
+
