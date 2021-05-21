@@ -9,6 +9,6 @@ add_executable(code
         Storagepool.hpp
         include.hpp
         tools.hpp
-        Bpt.hpp
+        BPT.hpp
         main.cpp
         corn.hpp)
