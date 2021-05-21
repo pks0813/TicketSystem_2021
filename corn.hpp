@@ -106,7 +106,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",2000),Trainpool("Trainpool.in",2000),Orderpool("Orderpool.in",2000),Seatpool("Seatpool.in",2000),Useronline(200009),MPS(10007)
+            Userpool("Userpool.in",4000),Trainpool("Trainpool.in",4000),Orderpool("Orderpool.in",4000),Seatpool("Seatpool.in",4000),Useronline(200009),MPS(10007)
         {
             std::fstream info;
             std::string X="Useless.in";
@@ -306,6 +306,30 @@ class Corn{
             std::cout<<Curtime;
             printf(" -> xx-xx xx:xx ");
             printf("%d x\n",curTrain.Pricepre[Num-1]);
+        }
+        else
+        {
+            Date Curtime(day,curTrain.Starttime);
+            printf("%s %c\n",curTrain.TrainID,curTrain.Type);
+            printf("%s xx-xx xx:xx -> ",curTrain.Station[0]);
+            std::cout<<Curtime;
+            printf(" 0 %d\n",curTrain.Seatnumber);
+            for (int i=1;i<=curTrain.StationNum-2;i++)
+            {
+                printf("%s ",curTrain.Station[i]);
+                Curtime=Curtime+curTrain.Traveltime[i-1];
+                std::cout<<Curtime;
+                printf(" -> ");
+                Curtime=Curtime+curTrain.Stoptime[i];
+                std::cout<<Curtime;
+                printf(" %d %d\n",curTrain.Pricepre[i],curTrain.Seatnumber);
+            }
+            printf("%s ",curTrain.Station[Num-1]);
+            Curtime=Curtime+curTrain.Traveltime[Num-2];
+            std::cout<<Curtime;
+            printf(" -> xx-xx xx:xx ");
+            printf("%d x\n",curTrain.Pricepre[Num-1]);
+        
         }
     }
     void release_train(std::vector<std::string> tmp){

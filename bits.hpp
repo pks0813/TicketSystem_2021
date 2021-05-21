@@ -1,9 +1,0 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <string>
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <cmath>
-#include <fstream>
