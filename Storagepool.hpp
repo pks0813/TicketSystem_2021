@@ -231,4 +231,154 @@ StoragePool<T>::~StoragePool(){
 }
 
 
+
+
+
+
+template <typename T>
+class StoragePoolPlus{
+    public:
+    int Indoor;
+    std::fstream info;
+    std::string File; 
+    int cnt=-1;
+    int Offset,Blsize;
+    int *index;
+    T *Storage;
+    bool *Boo;
+    QQHash<int> MP;
+    int NowDele;
+    StoragePoolPlus(const std::string &X,const int &len);
+    int Insert(const T &X);
+    void Erase(const int &id);
+    void Copy(const int &id,T &X);
+    void InsideRewrite(const int &id,const T &X);
+    void Rewrite(const int &id,const T &X);
+    int Readint();
+    void Rewriteint(const int &x);
+    void clean();
+    ~StoragePoolPlus();
+};
+
+template<typename T>
+StoragePoolPlus<T>::StoragePoolPlus(const std::string &X,const int &Len):File(X),MP(Len*5){
+    Indoor=Len;
+    index=new int[Indoor];
+    Boo=new bool[Indoor];
+    Storage=new T[Indoor];
+    info.open(X,std::ios::in | std::ios::out | std::ios::binary);
+    if (info.fail())
+    {
+        info.clear();
+        std::ofstream fout(X);
+        fout.close();
+        info.open(X,std::ios::in | std::ios::out | std::ios::binary);
+        info.seekp(0);
+        info.write(reinterpret_cast<char *> (&cnt),sizeof(int));
+    }     
+    info.seekp(0);
+    info.read(reinterpret_cast<char *> (&cnt),sizeof(int));
+    Offset=sizeof(int);
+    Blsize=sizeof(T);   
+    for (int i=0;i<Indoor;i++) index[i]=-1;
+    NowDele=0;   
+}
+template<typename T>
+int StoragePoolPlus<T>::Insert(const T &X){
+    cnt++;
+    info.seekp(Offset+cnt*Blsize);
+    info.write(reinterpret_cast<const char *> (&X),sizeof(T));
+    return cnt;
+}
+template<typename T> 
+void StoragePoolPlus<T>::InsideRewrite(const int &id,const T &X)
+{
+    // int last=clock();
+    info.seekp(Offset+id*Blsize);
+    info.write(reinterpret_cast<const char *> (&X),sizeof(T));
+    // sumCheck+=clock()-last;
+} 
+template<typename T> 
+void StoragePoolPlus<T>::Copy(const int &id,T &X){
+    std::pair<long long,int> Q=MP.Find((long long)id);
+    if (Q.first!=-1)
+    {
+        X=Storage[Q.second];
+        return;
+    }
+    if (index[NowDele]!=-1)
+    {
+        if (Boo[NowDele])
+            InsideRewrite(index[NowDele],Storage[NowDele]);
+        MP.Erase((long long)(index[NowDele]));
+    }
+    Boo[NowDele]=0;
+    index[NowDele]=id;
+    info.seekp(Offset+id*Blsize);
+    info.read(reinterpret_cast<char *> (&Storage[NowDele]),sizeof(T));
+    X=Storage[NowDele];
+    MP.Insert(std::make_pair((long long)(index[NowDele]),NowDele));
+    NowDele=(NowDele+1)%Indoor;
+}
+
+template<typename T> 
+void StoragePoolPlus<T>::Rewrite(const int &id,const T &X)
+{
+    std::pair<long long,int> Q=MP.Find((long long)id);
+    if (Q.first!=-1)
+    {
+        Storage[Q.second]=X;
+        Boo[Q.second]=1;
+        return;
+    }
+    if (index[NowDele]!=-1)
+    {
+        if (Boo[NowDele])
+        InsideRewrite(index[NowDele],Storage[NowDele]);
+        MP.Erase((long long)(index[NowDele]));
+    }
+    Boo[NowDele]=1;
+    index[NowDele]=id;
+    Storage[NowDele]=X;
+    MP.Insert(std::make_pair((long long)(index[NowDele]),NowDele));
+    NowDele=(NowDele+1)%Indoor;
+} 
+template<typename T>
+int StoragePoolPlus<T>::Readint(){
+    info.seekp(2*sizeof(int));
+    int x;
+    info.read(reinterpret_cast<char *>(&x),sizeof(int));
+    return x;
+}
+
+template<typename T>
+void StoragePoolPlus<T>::Rewriteint(const int &x){
+    info.seekp(2*sizeof(int));
+    info.write(reinterpret_cast<char *>(&x),sizeof(int));    
+}
+
+template<typename T>
+void StoragePoolPlus<T>::clean(){
+    info.close();
+    info.open(File,std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
+    cnt=-1;
+    for (int i=0;i<Indoor;i++) index[i]=-1;
+    info.seekp(0);
+    info.write(reinterpret_cast<char *> (&cnt),sizeof(int)); 
+}
+
+template<typename T>
+StoragePoolPlus<T>::~StoragePoolPlus(){
+    for (int i=0;i<Indoor;i++)
+    if (index[i]!=-1 && Boo[i])
+        InsideRewrite(index[i],Storage[i]);
+    delete []index;
+    delete []Boo;
+    delete []Storage;
+    info.seekp(0);
+    info.write(reinterpret_cast<char *> (&cnt),sizeof(int));
+    info.close();
+    // std::cerr<<CI<<std::endl;
+}
+
 #endif

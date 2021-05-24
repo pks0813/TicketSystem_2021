@@ -97,10 +97,10 @@ class Corn{
 
     };
     BPT UserBPT,TrainBPT,StationTrainBPT,UserTimeBPT,TrainTimeBPT,TrainSeatBPT;
-    StoragePool<User> Userpool;
+    StoragePoolPlus<User> Userpool;
     StoragePool<TrainInfo> Trainpool;
-    StoragePool<Order> Orderpool;
-    StoragePool<Seat> Seatpool;
+    StoragePoolPlus<Order> Orderpool;
+    StoragePoolPlus<Seat> Seatpool;
     QQHash<int> Useronline;
     QQHash<std::pair<int,Date>> MPS;
     int Usernumber=0;
@@ -162,10 +162,9 @@ class Corn{
         if (Usernumber==0) {flat=1; tem.Privilege=10;}
         if (flat)   
         {
-            int x=Userpool.Insert(tem);
-            int Suc=UserBPT.Insert(pksHash(tem.Username),x);
-            if (Suc==-1) {printf("-1\n");Userpool.Erase(x);}
-            else {Usernumber++;printf("0\n");}
+            int Suc=UserBPT.Insert(pksHash(tem.Username),Userpool.cnt+1);
+            if (Suc==-1) {printf("-1\n");}
+            else {Userpool.Insert(tem);Usernumber++;printf("0\n");}
         }
         else printf("-1\n");    
     }
