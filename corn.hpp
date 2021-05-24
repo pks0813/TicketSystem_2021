@@ -366,7 +366,7 @@ class Corn{
         long long SStationkey=pksHash1(Sname);
         int Sday=StrToDate(tmp[6]);
         sjtu::vector<int> TrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
-        Ticket ans[1000];
+        Ticket ans[5000];
         int ansnum=0;
         for (int i=0;i<(int)(TrainVec.size());i++)
         {          
@@ -408,7 +408,7 @@ class Corn{
             now.price=CurTrain.Pricepre[Tnum]-CurTrain.Pricepre[Snum];
             ans[ansnum++]=now;
         }
-        int p[1000];
+        int p[5000];
         printf("%d\n",ansnum);
         if (ansnum==0) return;
         for (int i=0;i<ansnum;i++) p[i]=i;
