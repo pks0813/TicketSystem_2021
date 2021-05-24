@@ -434,6 +434,10 @@ class Corn{
         sjtu::vector<int> TTrainVec=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62));
         TrainInfo TrainInfoTvec[1000];
         int Tvecsize=TTrainVec.size();
+        if (Tvecsize>1000)
+        {
+            while (1) printf("666");
+        }
         for (int i=0;i<Tvecsize;i++)
             Trainpool.Copy(TTrainVec[i],TrainInfoTvec[i]);
             
