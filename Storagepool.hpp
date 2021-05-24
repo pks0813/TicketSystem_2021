@@ -1,8 +1,7 @@
 #ifndef STORAGEPOOL_HPP
 #define STORAGEPOOL_HPP
 #include"include.hpp"
-
-
+extern int sumCheck;
 int CI=0;
 template<class T>
 class QQHash{// long long->T
@@ -135,9 +134,11 @@ void StoragePool<T>::Erase(const int &id){
 template<typename T> 
 void StoragePool<T>::InsideRewrite(const int &id,const T &X)
 {
+    // int last=clock();
     CI++;
     info.seekp(Offset+id*Blsize);
     info.write(reinterpret_cast<const char *> (&X),sizeof(T));
+    // sumCheck+=clock()-last;
 } 
 template<typename T> 
 void StoragePool<T>::Copy(const int &id,T &X){
