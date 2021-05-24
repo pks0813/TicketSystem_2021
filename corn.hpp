@@ -5,6 +5,7 @@
 const long long M=1e10;
 int timeID=0;
 int pksuseless;
+int TMPLENGTH;
 class Corn{
     public:
     class User{
@@ -70,7 +71,7 @@ class Corn{
             printf(" %d %d\n",X.price,X.Seatmax);
         }
         
-        friend void Qsort(const int &L,const int &R,sjtu::vector<int> &P,const sjtu::vector<Ticket> &ARR,bool (*Compare)(const Ticket&,const Ticket&)){
+        friend void Qsort(const int &L,const int &R,int P[],Ticket ARR[],bool (*Compare)(const Ticket&,const Ticket&)){
             int i,j,x;
             Ticket Midvalue=ARR[P[(L+R)/2]];
             i=L;j=R;
@@ -138,7 +139,7 @@ class Corn{
             std::cerr<<i->first<<' '<<i->second<<std::endl;
     }
     //UserController
-    void add_user(sjtu::vector<std::string> tmp){
+    void add_user(std::string tmp[]){
         User tem;
         long long Q=pksHash1(tmp[2].c_str());
         auto Curiter=Useronline.Find(Q);
@@ -168,7 +169,7 @@ class Corn{
         }
         else printf("-1\n");    
     }
-    void login(sjtu::vector<std::string> tmp){
+    void login(std::string tmp[]){
         std::pair<long long,long long> Q=pksHash(tmp[2].c_str());
         if (Useronline.Find(Q.first).first!=-1) {printf("-1\n");return;}
         int IDcur=UserBPT.Find(Q);
@@ -181,14 +182,14 @@ class Corn{
             printf("0\n");
         }
     }
-    void logout(sjtu::vector<std::string> tmp){
+    void logout(std::string tmp[]){
         long long Q=pksHash1(tmp[2].c_str());
         auto Curiter=Useronline.Find(Q);
         if (Curiter.first==-1) {printf("-1\n");return;}
         Useronline.Erase(Q);
         printf("0\n");
     }
-    void query_profile(sjtu::vector<std::string> tmp){
+    void query_profile(std::string tmp[]){
         long long CurQ=pksHash1(tmp[2].c_str());
         std::pair<long long ,long long> QueQ=pksHash(tmp[4].c_str());
         auto CurIter=Useronline.Find(CurQ);
@@ -203,7 +204,7 @@ class Corn{
             printf("%s %s %s %d\n",Queuser.Username,Queuser.Name,Queuser.MailAddr,Queuser.Privilege);
         else printf("-1\n");
     }    
-    void modify_profile(sjtu::vector<std::string> tmp){
+    void modify_profile(std::string tmp[]){
         long long CurQ=pksHash1(tmp[2].c_str());
         std::pair<long long ,long long> QueQ=pksHash(tmp[4].c_str());
         auto CurIter=Useronline.Find(CurQ);
@@ -215,7 +216,7 @@ class Corn{
         Userpool.Copy(IDCur,Curuser);
         Userpool.Copy(IDQue,Queuser);
         if (Curuser.Privilege<=Queuser.Privilege && IDCur!=IDQue) {printf("-1\n");return;}
-        for (int i=6;i<(int)(tmp.size());i+=2)
+        for (int i=6;i<TMPLENGTH;i+=2)
         {
             if (tmp[i-1][1]=='p') strcpy(Queuser.Password,tmp[i].c_str());
             if (tmp[i-1][1]=='n') strcpy(Queuser.Name,tmp[i].c_str());
@@ -229,12 +230,12 @@ class Corn{
         Userpool.Rewrite(IDQue,Queuser);    
         printf("%s %s %s %d\n",Queuser.Username,Queuser.Name,Queuser.MailAddr,Queuser.Privilege);
     }
-    void add_train(sjtu::vector<std::string> tmp){
+    void add_train(std::string tmp[]){
         TrainInfo now;
         strcpy(now.TrainID,tmp[2].c_str());
         now.StationNum=atoi(tmp[4].c_str());
         now.Seatnumber=atoi(tmp[6].c_str());
-        sjtu::vector<std::string> Q;
+        std::string Q[200];
         pksSplit(tmp[8],Q,'|');
         for (int i=0;i<now.StationNum;i++)
             strcpy(now.Station[i],Q[i].c_str());
@@ -262,7 +263,7 @@ class Corn{
         if (flat==-1) {printf("-1\n");Trainpool.Erase(CurID);}
         else printf("0\n");
     }
-    void delete_train(sjtu::vector<std::string> tmp){
+    void delete_train(std::string tmp[]){
         std::pair<long long,long long> key(pksHash(tmp[2].c_str()));
         int flat=TrainBPT.Find(key);
         if (flat==-1) {printf("-1\n");return;}
@@ -273,7 +274,7 @@ class Corn{
         TrainBPT.Erase(key);
         printf("0\n");
     }
-    void query_train(sjtu::vector<std::string> tmp){
+    void query_train(std::string tmp[]){
         std::pair<long long,long long> key(pksHash(tmp[4].c_str()));
         int flat=TrainBPT.Find(key);
         if (flat==-1){printf("-1\n");return;}
@@ -325,7 +326,7 @@ class Corn{
         
         }
     }
-    void release_train(sjtu::vector<std::string> tmp){
+    void release_train(std::string tmp[]){
         std::pair<long long,long long> key(pksHash(tmp[2].c_str()));
         int flat=TrainBPT.Find(key);
         if (flat==-1) {printf("-1\n");return;}
@@ -358,14 +359,15 @@ class Corn{
     Date ArriveTime(const TrainInfo & CurTrain,const int &X){
         return CurTrain.Arrive[X];
     }
-    void query_ticket(sjtu::vector<std::string> tmp){
+    void query_ticket(std::string tmp[]){
         char Sname[31],Tname[31];
         strcpy(Sname,tmp[2].c_str());
         strcpy(Tname,tmp[4].c_str());
         long long SStationkey=pksHash1(Sname);
         int Sday=StrToDate(tmp[6]);
         sjtu::vector<int> TrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
-        sjtu::vector<Ticket> ans;
+        Ticket ans[1000];
+        int ansnum=0;
         for (int i=0;i<(int)(TrainVec.size());i++)
         {          
             TrainInfo CurTrain;
@@ -404,23 +406,22 @@ class Corn{
             now.TDate=CurTrain.Arrive[Tnum]+Neday*1440;
             now.time=now.TDate-now.SDate;
             now.price=CurTrain.Pricepre[Tnum]-CurTrain.Pricepre[Snum];
-            ans.push_back(now);
+            ans[ansnum++]=now;
         }
-        sjtu::vector<int> p;
-        int N=(int)(ans.size());
-        printf("%d\n",N);
-        if (N==0) return;
-        for (int i=0;i<N;i++) p.push_back(i);
-        if (tmp.size()==9 && tmp[8]=="cost")
-        Qsort(0,N-1,p,ans,PriceCompare);
-        else Qsort(0,N-1,p,ans,TimeCompare);
-        for (int i=0;i<N;i++)
+        int p[1000];
+        printf("%d\n",ansnum);
+        if (ansnum==0) return;
+        for (int i=0;i<ansnum;i++) p[i]=i;
+        if (TMPLENGTH==9 && tmp[8]=="cost")
+        Qsort(0,ansnum-1,p,ans,PriceCompare);
+        else Qsort(0,ansnum-1,p,ans,TimeCompare);
+        for (int i=0;i<ansnum;i++)
             SC(ans[p[i]]);
     }
     const int inf=2e9;
-    void query_transfer(sjtu::vector<std::string> tmp){
+    void query_transfer(std::string tmp[]){
         bool TimePriceflat=0;
-        if (tmp.size()==9 && tmp[8]=="cost") TimePriceflat=1;
+        if (TMPLENGTH==9 && tmp[8]=="cost") TimePriceflat=1;
         std::pair<Ticket,Ticket> Bestans;
         int ansPrice=inf,ansTime1=inf,ansTimesum=inf;    
         char Sname[31],Tname[31];
@@ -533,7 +534,7 @@ class Corn{
         else printf("0\n");
     }
 
-    void buy_ticket(sjtu::vector<std::string> tmp){
+    void buy_ticket(std::string tmp[]){
         long long Userkey=pksHash1(tmp[2].c_str());
         Order CurOrder;
         auto Curiter=Useronline.Find(Userkey);
@@ -590,7 +591,7 @@ class Corn{
         }
         else
         {
-            if (tmp.size()==13 || tmp[14]=="false") {printf("-1\n");return;}
+            if (TMPLENGTH==13 || tmp[14]=="false") {printf("-1\n");return;}
             CurOrder.type='P';
             CurOrder.time=++Ordertime;
             int ID=Orderpool.Insert(CurOrder);
@@ -600,7 +601,7 @@ class Corn{
         }
     }
 
-    void query_order(sjtu::vector<std::string> tmp){
+    void query_order(std::string tmp[]){
         long long Userkey=pksHash1(tmp[2].c_str());
         auto Useriter=Useronline.Find(Userkey);
         if (Useriter.first==-1) {printf("-1\n");return;}
@@ -621,13 +622,13 @@ class Corn{
         }
     }   
 
-    void refund_ticket(sjtu::vector<std::string> tmp){
+    void refund_ticket(std::string tmp[]){
         long long Userkey=pksHash1(tmp[2].c_str());
         auto Useriter=Useronline.Find(Userkey);
         if (Useriter.first==-1) {printf("-1\n");return;}
         sjtu::vector<int> Q=UserTimeBPT.Findinterval(std::make_pair(Userkey,-1),std::make_pair(Userkey,Ordertime+1));
         int x=1;
-        if (tmp.size()==5) x=StrToInt(tmp[4]);
+        if (TMPLENGTH==5) x=StrToInt(tmp[4]);
         x=(int)Q.size()-x;
         if (x<0 || x>=(int)Q.size()) {printf("-1\n");return;}
         Order Curorder;
@@ -683,8 +684,8 @@ class Corn{
             // printf("%d   ",++timeID);
             getline(std::cin,S);
             if (S[S.length()-1]==13 || S[S.length()-1]==10) S = S.substr(0, S.length() -1);
-            sjtu::vector<std::string> tmp;
-            pksSplit(S,tmp,' ');         
+            std::string tmp[50];
+            TMPLENGTH=pksSplit(S,tmp,' ');         
             if (tmp[0]=="add_user"){add_user(tmp);} 
             if (tmp[0]=="login"){login(tmp);}
             if (tmp[0]=="logout"){logout(tmp);}

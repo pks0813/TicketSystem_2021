@@ -35,17 +35,21 @@ long long pksHash1(const char *S){
         tmp=(Multi(tmp,1000000007,mod1)+S[i])%mod1;
     return tmp;
 }
-void pksSplit(const std::string &S,sjtu::vector<std::string> &tmp,const char &splitsig){
-    tmp.clear();
-    tmp.push_back("");
+int pksSplit(const std::string &S,std::string tmp[],const char &splitsig){
+    int cnt=1;
+    tmp[0]="";
     int len=(int)(S.length());
     // exit(0);
     for (int i=0;i<len;i++)
     {
         if (S[i]!=splitsig)
-            tmp.back()+=S[i];
-        else tmp.push_back("");
+            tmp[cnt-1]+=S[i];
+        else {
+            cnt++;
+            tmp[cnt-1]="";    
+            }
     }
+    return cnt;
 }
 int StringCompare(const char S1[],const char S2[]){
     
@@ -73,12 +77,12 @@ int StrToInt(const std::string &S)
     return x;
 }
 int StrToMin(const std::string &S){
-    sjtu::vector<std::string> tmp;
+    std::string tmp[3];
     pksSplit(S,tmp,':');
     return StrToInt(tmp[0])*60+StrToInt(tmp[1]);
 }
 int StrToDate(const std::string &S){
-    sjtu::vector<std::string> tmp;
+    std::string tmp[3];
     pksSplit(S,tmp,'-');
     int mon=StrToInt(tmp[0]),day=StrToInt(tmp[1]);
     if(mon<6) return -66666;
