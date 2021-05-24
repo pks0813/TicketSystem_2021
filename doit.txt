@@ -10,6 +10,5 @@ time ./code <7.in >7.out
 time ./code <8.in >8.out
 time ./code <9.in >9.out
 time ./code <10.in >10.out
-time ./code <11.in >11.out
 ./compare
 
