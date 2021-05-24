@@ -234,8 +234,8 @@ namespace sjtu {
          */
         vector() {
             this->length = 0;
-            this->capacity = 5;
-            this->data = new T *[5];
+            this->capacity = 2;
+            this->data = new T *[2];
         }
         vector(const vector &other) {
             this->length = other.length;
