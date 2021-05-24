@@ -31,7 +31,8 @@ class Corn{
         int StationNum;
         char Station[100][31];
         int Pricepre[100];
-        int Seatnumber,Starttime,Traveltime[100],Stoptime[100],Salestart,Saleending;
+        int Seatnumber,Stoptime[100],Salestart,Saleending;
+        Date Arrive[100];
         char Type;
         bool Release=0;
         TrainInfo(){}
@@ -242,15 +243,16 @@ class Corn{
         now.Pricepre[0]=0;
         for (int i=1;i<=now.StationNum-1;i++)
             now.Pricepre[i]=now.Pricepre[i-1]+StrToInt(Q[i-1]);
-        now.Starttime=StrToMin(tmp[12]);
+        now.Arrive[0]=StrToMin(tmp[12]);
         pksSplit(tmp[16],Q,'|');
         now.Stoptime[0]=0;
         now.Stoptime[now.StationNum-1]=0;
         for (int i=1;i<=now.StationNum-2;i++)
             now.Stoptime[i]=StrToInt(Q[i-1]);
         pksSplit(tmp[14],Q,'|');
-        for (int i=0;i<=now.StationNum-2;i++)
-            now.Traveltime[i]=StrToInt(Q[i]);
+        for (int i=1;i<now.StationNum;i++)
+            now.Arrive[i]=now.Arrive[i-1]+(now.Stoptime[i-1]+StrToInt(Q[i-1]));
+        
         pksSplit(tmp[18],Q,'|');
         now.Salestart=StrToDate(Q[0]);
         now.Saleending=StrToDate(Q[1]);
@@ -286,47 +288,39 @@ class Corn{
             int SeatID=TrainSeatBPT.Find(std::make_pair(key.first,(long long)day));
             Seat TrainSeat;
             Seatpool.Copy(SeatID,TrainSeat);
-            Date Curtime(day,curTrain.Starttime);
             printf("%s %c\n",curTrain.TrainID,curTrain.Type);
             printf("%s xx-xx xx:xx -> ",curTrain.Station[0]);
-            std::cout<<Curtime;
+            std::cout<<(curTrain.Arrive[0]+day*1440);
             printf(" 0 %d\n",TrainSeat.A[0]);
             for (int i=1;i<=curTrain.StationNum-2;i++)
             {
                 printf("%s ",curTrain.Station[i]);
-                Curtime=Curtime+curTrain.Traveltime[i-1];
-                std::cout<<Curtime;
+                std::cout<<(curTrain.Arrive[i]+day*1440);
                 printf(" -> ");
-                Curtime=Curtime+curTrain.Stoptime[i];
-                std::cout<<Curtime;
+                std::cout<<(curTrain.Arrive[i]+day*1440+curTrain.Stoptime[i]);
                 printf(" %d %d\n",curTrain.Pricepre[i],TrainSeat.A[i]);
             }
             printf("%s ",curTrain.Station[Num-1]);
-            Curtime=Curtime+curTrain.Traveltime[Num-2];
-            std::cout<<Curtime;
+            std::cout<<(curTrain.Arrive[Num-1]+day*1440);
             printf(" -> xx-xx xx:xx ");
             printf("%d x\n",curTrain.Pricepre[Num-1]);
         }
         else
         {
-            Date Curtime(day,curTrain.Starttime);
             printf("%s %c\n",curTrain.TrainID,curTrain.Type);
             printf("%s xx-xx xx:xx -> ",curTrain.Station[0]);
-            std::cout<<Curtime;
+            std::cout<<(curTrain.Arrive[0]+day*1440);
             printf(" 0 %d\n",curTrain.Seatnumber);
             for (int i=1;i<=curTrain.StationNum-2;i++)
             {
                 printf("%s ",curTrain.Station[i]);
-                Curtime=Curtime+curTrain.Traveltime[i-1];
-                std::cout<<Curtime;
+                std::cout<<(curTrain.Arrive[i]+day*1440);
                 printf(" -> ");
-                Curtime=Curtime+curTrain.Stoptime[i];
-                std::cout<<Curtime;
+                std::cout<<(curTrain.Arrive[i]+day*1440+curTrain.Stoptime[i]);
                 printf(" %d %d\n",curTrain.Pricepre[i],curTrain.Seatnumber);
             }
             printf("%s ",curTrain.Station[Num-1]);
-            Curtime=Curtime+curTrain.Traveltime[Num-2];
-            std::cout<<Curtime;
+            std::cout<<(curTrain.Arrive[Num-1]+day*1440);
             printf(" -> xx-xx xx:xx ");
             printf("%d x\n",curTrain.Pricepre[Num-1]);
         
@@ -363,10 +357,7 @@ class Corn{
         return StringCompare(X1.TrainID,X2.TrainID)==-1;
     }
     Date ArriveTime(const TrainInfo & CurTrain,const int &X){
-        Date nowtime(0,CurTrain.Starttime);
-        for (int i=0;i<X;i++)
-            nowtime=nowtime+(CurTrain.Traveltime[i]+CurTrain.Stoptime[i]);
-        return nowtime;
+        return CurTrain.Arrive[X];
     }
     void query_ticket(std::vector<std::string> tmp){
         char Sname[31],Tname[31];
@@ -394,7 +385,7 @@ class Corn{
             now.price=0;now.time=0;
             strcpy(now.Sname,Sname);
             strcpy(now.Tname,Tname);
-            int Neday=Sday-now.SDate.Day;
+            int Neday=Sday-now.SDate.Day();
             now.SDate=now.SDate+Neday*1440;
             if (Neday<CurTrain.Salestart || Neday>CurTrain.Saleending) continue;
             int Tnum=-1;
@@ -409,8 +400,8 @@ class Corn{
             int SeatID=TrainSeatBPT.Find(std::make_pair(pksHash1(CurTrain.TrainID),Neday));
             Seat TrainSeat;
             Seatpool.Copy(SeatID,TrainSeat);
-            for (int i=Snum;i<Tnum;i++)
-                now.Seatmax=min(now.Seatmax,TrainSeat.A[i]);
+            for (int j=Snum;j<Tnum;j++)
+                now.Seatmax=min(now.Seatmax,TrainSeat.A[j]);
             strcpy(now.TrainID,CurTrain.TrainID);
             now.TDate=ArriveTime(CurTrain,Tnum)+Neday*1440;
             now.time=now.TDate-now.SDate;
@@ -446,7 +437,7 @@ class Corn{
         TrainInfoTvec.resize(TTrainVec.size());
         for (int i=0;i<(int)(TTrainVec.size());i++)
             Trainpool.Copy(TTrainVec[i],TrainInfoTvec[i]);
-        int ansTrain1,ansTrain2,ansS1,ansS2,ansT1,ansT2,ansDay1,ansDay2;
+        int ansTrain1=-1,ansTrain2=-1,ansS1=-1,ansS2=-1,ansT1=-1,ansT2=-1,ansDay1=-1,ansDay2=-1;
         for (int i=0;i<(int)(STrainVec.size());i++)
         {
             MPS.clean();
@@ -461,17 +452,12 @@ class Corn{
                 }
             if (Snum==-1 || Snum==CurTrain.StationNum-1) continue;
             Date NowDate;
-            NowDate=ArriveTime(CurTrain,Snum)+CurTrain.Stoptime[Snum];
-            int Neday=Sday-NowDate.Day;
+            NowDate=CurTrain.Arrive[Snum]+CurTrain.Stoptime[Snum];
+            int Neday=Sday-NowDate.Day();
             NowDate=NowDate+Neday*1440;
             if (Neday<CurTrain.Salestart || Neday>CurTrain.Saleending) continue;
-            Date FuckDate=NowDate;
             for (int j=Snum+1;j<CurTrain.StationNum;j++)
-            {
-                FuckDate=FuckDate+CurTrain.Traveltime[j-1];
-                MPS.Insert(std::make_pair(pksHash1(CurTrain.Station[j]),std::make_pair(j,FuckDate)));
-                FuckDate=FuckDate+CurTrain.Stoptime[j];
-            } 
+                MPS.Insert(std::make_pair(pksHash1(CurTrain.Station[j]),std::make_pair(j,CurTrain.Arrive[j]+Neday*1440)));
             for (int j=0;j<(int)(TTrainVec.size());j++)
             if (STrainVec[i]!=TTrainVec[j])
             {
@@ -483,18 +469,15 @@ class Corn{
                         Tnum=k;break;
                     }
                 if (Tnum==-1 || Tnum==0) continue;
-                Date ArriveT=ArriveTime(CurArriveTrain,Tnum);
-                Date ChushiFa=Date(0,CurArriveTrain.Starttime);
-                for (int k=0;k<Tnum;ChushiFa=ChushiFa+CurArriveTrain.Traveltime[k],k++)
+                Date ArriveT=CurArriveTrain.Arrive[Tnum];
+                for (int k=0;k<Tnum;k++)
                 {
-                    ChushiFa=ChushiFa+CurArriveTrain.Stoptime[k];
                     long long MidKey=pksHash1(CurArriveTrain.Station[k]);
                     auto Miditer=MPS.Find(MidKey);
                     if (Miditer.first==-1) continue;
                     Date FirstDate=Miditer.second.second;
-                    // int SecondDay=max(CurArriveTrain.Salestart,FirstDate.Day-ChushiFa.Day);
                     int SecondDay=CurArriveTrain.Salestart;
-                    Date ActualStartDay=ChushiFa+SecondDay*1440;
+                    Date ActualStartDay=CurArriveTrain.Arrive[k]+(CurArriveTrain.Stoptime[k]+SecondDay*1440);
                     while ((ActualStartDay-FirstDate)<0) {SecondDay++;ActualStartDay=ActualStartDay+1440;}
                     if (SecondDay>CurArriveTrain.Saleending) continue;
                     Date ActualArriveDay=ArriveT+SecondDay*1440;
@@ -574,7 +557,7 @@ class Corn{
         }
         if ( CurOrder.SStation==-1 ||  CurOrder.TStation==-1)  {printf("-1\n");return;}
         Date Stime=ArriveTime(CurTrain,CurOrder.SStation); Stime=Stime+CurTrain.Stoptime[CurOrder.SStation];        
-        CurOrder.Day=StrToDate(tmp[6])-Stime.Day;
+        CurOrder.Day=StrToDate(tmp[6])-Stime.Day();
         if (CurOrder.Day>CurTrain.Saleending || CurOrder.Day<CurTrain.Salestart) {printf("-1\n");return;}
         CurOrder.Sdate=Stime+CurOrder.Day*1440;
         CurOrder.Tdate=ArriveTime(CurTrain,CurOrder.TStation)+CurOrder.Day*1440;
@@ -657,7 +640,6 @@ class Corn{
             Curorder.type='R';
             Orderpool.Rewrite(Q[x],Curorder); 
             long long Trainkey=pksHash1(Curorder.TrainName);
-            // TrainTimeBPT.Erase(std::make_pair(Trainkey,Curorder.Day*M+Curorder.time));
             int SeatID=TrainSeatBPT.Find(std::make_pair(Trainkey,(long long)Curorder.Day));
             Seat TrainSeat;
             Seatpool.Copy(SeatID,TrainSeat);

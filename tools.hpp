@@ -87,32 +87,39 @@ int StrToDate(const std::string &S){
     if (mon==8) return 61+day-1;    
     if (mon==9) return 92+day-1;
     return 66666;
-    
 }
 //1440min=1day
 struct Date{
-    int Day,Min;
-    Date(const int &_day,const int &_min):Day(_day),Min(_min){
-        Day+=Min/1440;Min%=1440;
-    }
+    int Time;
+    Date(const int &_day,const int &_min):Time(_day*1440+_min){}
+    Date(const int &time):Time(time){}
     Date(){}
     Date operator +(const int &x){
-        return Date(Day,Min+x); }
+        return Date(Time+x); }
+    Date& operator +=(const int &x){
+        Time+=x;return (*this);
+    }
     friend int operator - (const Date &X,const Date &Y){
-        return (X.Day-Y.Day)*1440+X.Min-Y.Min;}
-    
+        return X.Time-Y.Time;}
+    int Day()const{
+        return Time/1440;
+    }
+    int Min()const{
+        return Time%1440;
+    }
 	
     friend std::ostream& operator << (std::ostream& os, const Date& cc)
 	{
         int nowtian;
-        if (cc.Day<=29) {os<<"06-";nowtian=cc.Day+1;}
-        else if (cc.Day<=60) {os<<"07-";nowtian=cc.Day-30+1;}
-        else if (cc.Day<=91) {os<<"08-";nowtian=cc.Day-30-31+1;}
-        else {os<<"09-";nowtian=cc.Day-30-31-31+1;}
+        int Day=cc.Day(),Min=cc.Min();
+        if (Day<=29) {os<<"06-";nowtian=Day+1;}
+        else if (Day<=60) {os<<"07-";nowtian=Day-30+1;}
+        else if (Day<=91) {os<<"08-";nowtian=Day-30-31+1;}
+        else {os<<"09-";nowtian=Day-30-31-31+1;}
         if (nowtian<10) os<<'0';
         os<<nowtian;
         os<<" ";
-        int nowshi=cc.Min/60,nowfen=cc.Min%60;
+        int nowshi=Min/60,nowfen=Min%60;
         if (nowshi<10) os<<'0';
         os<<nowshi;
         os<<":";

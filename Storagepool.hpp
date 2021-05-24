@@ -60,6 +60,7 @@ class StoragePool{
     T *Storage;
     QQHash<int> MP;
     int NowDele;
+    std::vector<int> Spar;
     StoragePool(const std::string &X,const int &len);
     int Insert(const T &X);
     void Erase(const int &id);
