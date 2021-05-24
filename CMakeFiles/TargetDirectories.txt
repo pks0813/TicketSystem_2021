@@ -1,0 +1,3 @@
+/mnt/d/代码呢/letsg_1/CMakeFiles/rebuild_cache.dir
+/mnt/d/代码呢/letsg_1/CMakeFiles/edit_cache.dir
+/mnt/d/代码呢/letsg_1/CMakeFiles/code.dir
