@@ -57,9 +57,9 @@ class StoragePool{
     int Offset,Blsize;
     int *index;
     T *Storage;
+    bool *Boo;
     QQHash<int> MP;
     int NowDele;
-    std::vector<int> Spar;
     StoragePool(const std::string &X,const int &len);
     int Insert(const T &X);
     void Erase(const int &id);
@@ -73,9 +73,10 @@ class StoragePool{
 };
 
 template<typename T>
-StoragePool<T>::StoragePool(const std::string &X,const int &Len):File(X),MP(10007){
+StoragePool<T>::StoragePool(const std::string &X,const int &Len):File(X),MP(Len*5){
     Indoor=Len;
     index=new int[Indoor];
+    Boo=new bool[Indoor];
     Storage=new T[Indoor];
     info.open(X,std::ios::in | std::ios::out | std::ios::binary);
     if (info.fail())
@@ -150,9 +151,12 @@ void StoragePool<T>::Copy(const int &id,T &X){
     }
     if (index[NowDele]!=-1)
     {
-        InsideRewrite(index[NowDele],Storage[NowDele]);
+        if (Boo[NowDele])
+            InsideRewrite(index[NowDele],Storage[NowDele]);
+
         MP.Erase((long long)(index[NowDele]));
     }
+    Boo[NowDele]=0;
     index[NowDele]=id;
     info.seekp(Offset+id*Blsize);
     info.read(reinterpret_cast<char *> (&Storage[NowDele]),sizeof(T));
@@ -168,13 +172,16 @@ void StoragePool<T>::Rewrite(const int &id,const T &X)
     if (Q.first!=-1)
     {
         Storage[Q.second]=X;
+        Boo[Q.second]=1;
         return;
     }
     if (index[NowDele]!=-1)
     {
+        if (Boo[NowDele])
         InsideRewrite(index[NowDele],Storage[NowDele]);
         MP.Erase((long long)(index[NowDele]));
     }
+    Boo[NowDele]=1;
     index[NowDele]=id;
     Storage[NowDele]=X;
     MP.Insert(std::make_pair((long long)(index[NowDele]),NowDele));
@@ -210,9 +217,10 @@ void StoragePool<T>::clean(){
 template<typename T>
 StoragePool<T>::~StoragePool(){
     for (int i=0;i<Indoor;i++)
-    if (index[i]!=-1)
+    if (index[i]!=-1 && Boo[i])
         InsideRewrite(index[i],Storage[i]);
     delete []index;
+    delete []Boo;
     delete []Storage;
     info.seekp(0);
     info.write(reinterpret_cast<char *> (&cnt),sizeof(int));
