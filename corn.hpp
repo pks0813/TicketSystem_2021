@@ -432,11 +432,12 @@ class Corn{
         int Sday=StrToDate(tmp[6]);
         sjtu::vector<int> STrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
         sjtu::vector<int> TTrainVec=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62));
-        TrainInfo TrainInfoTvec[1000];
+        TrainInfo TrainInfoTvec[2000];
         int Tvecsize=TTrainVec.size();
-        if (Tvecsize>1000)
+        if (Tvecsize>2000)
         {
-            while (1) printf("666");
+            printf("666");
+            exit(0);
         }
         for (int i=0;i<Tvecsize;i++)
             Trainpool.Copy(TTrainVec[i],TrainInfoTvec[i]);
