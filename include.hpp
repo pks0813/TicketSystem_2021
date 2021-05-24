@@ -1,4 +1,4 @@
-    #ifndef INCLUDE_HPP
+#ifndef INCLUDE_HPP
 #define INCLUDE_HPP
 
 #include <cstdio>
@@ -10,7 +10,6 @@
 #include <fstream>
 #include <cmath>
 #include <fstream>
-#include<vector>
 #include<map>
 // #include <utility>
 // #include <cassert>
@@ -18,9 +17,9 @@
 // #include <tuple>
 // #include <sstream>
 
+#include"vector.hpp"
 #include "Storagepool.hpp"
 #include "tools.hpp"
 #include"BPT.hpp"
 #include"corn.hpp" 
-// #include"hash.hpp" 
 #endif

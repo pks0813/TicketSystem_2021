@@ -7,11 +7,11 @@ template<class T>
 class QQHash{// long long->T
     public:
     int Len;
-    std::vector<int> HasChucun;
-    std::vector<std::pair<long long,T>> *ARR;
+    sjtu::vector<int> HasChucun;
+    sjtu::vector<std::pair<long long,T>> *ARR;
     T Rubish;
     QQHash(const int &len):Len(len){
-        ARR=new std::vector<std::pair<long long,T>>[Len];
+        ARR=new sjtu::vector<std::pair<long long,T>>[Len];
         HasChucun.clear();
     }
     std::pair<long long,T> Find(const long long &X){
@@ -25,7 +25,7 @@ class QQHash{// long long->T
         int ID=X%Len;
         for (auto Iter=ARR[ID].begin();Iter!=ARR[ID].end();Iter++)
         {
-            if ((Iter->first)==X)
+            if (((*Iter).first)==X)
             {
                 ARR[ID].erase(Iter);
                 return;

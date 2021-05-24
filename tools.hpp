@@ -35,7 +35,7 @@ long long pksHash1(const char *S){
         tmp=(Multi(tmp,1000000007,mod1)+S[i])%mod1;
     return tmp;
 }
-void pksSplit(const std::string &S,std::vector<std::string> &tmp,const char &splitsig){
+void pksSplit(const std::string &S,sjtu::vector<std::string> &tmp,const char &splitsig){
     tmp.clear();
     tmp.push_back("");
     int len=(int)(S.length());
@@ -73,12 +73,12 @@ int StrToInt(const std::string &S)
     return x;
 }
 int StrToMin(const std::string &S){
-    std::vector<std::string> tmp;
+    sjtu::vector<std::string> tmp;
     pksSplit(S,tmp,':');
     return StrToInt(tmp[0])*60+StrToInt(tmp[1]);
 }
 int StrToDate(const std::string &S){
-    std::vector<std::string> tmp;
+    sjtu::vector<std::string> tmp;
     pksSplit(S,tmp,'-');
     int mon=StrToInt(tmp[0]),day=StrToInt(tmp[1]);
     if(mon<6) return -66666;
@@ -135,7 +135,7 @@ void SC(const std::string &X){
 const int MX=50000;
 template<typename T>
 class Hash{//long long -->T
-    std::vector<T> ARR;
+    sjtu::vector<T> ARR;
     
     
 }*/

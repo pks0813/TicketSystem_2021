@@ -50,9 +50,9 @@ class BPT{
             if (iter==TREE.end()) return -1;
             return iter->second;
         }
-        std::vector<int> Findinterval(const std::pair<long long,long long> &keyleft,const std::pair<long long,long long> &keyright){
+        sjtu::vector<int> Findinterval(const std::pair<long long,long long> &keyleft,const std::pair<long long,long long> &keyright){
             auto iter=TREE.lower_bound(keyleft);
-            std::vector<int> ans;
+            sjtu::vector<int> ans;
             while (iter!=TREE.end() && iter->first<=keyright)  
             {
                 ans.push_back(iter->second);
