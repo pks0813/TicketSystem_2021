@@ -60,6 +60,16 @@ class BPT{
             }
             return ans;
         }
+        int Findinterval(const std::pair<long long,long long> &keyleft,const std::pair<long long,long long> &keyright,int ans[]){
+            int len=0;
+            auto iter=TREE.lower_bound(keyleft);
+            while (iter!=TREE.end() && iter->first<=keyright)  
+            {
+                ans[++len]=iter->second;
+                iter++;
+            }
+            return len;
+        }
         void clean(){
             TREE.clear();
             num=0;

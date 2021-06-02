@@ -81,6 +81,7 @@ StoragePool<T>::StoragePool(const std::string &X,const int &Len):File(X),MP(Len*
     info.open(X,std::ios::in | std::ios::out | std::ios::binary);
     if (info.fail())
     {
+        printf("6666\n");
         info.clear();
         std::ofstream fout(X);
         fout.close();
@@ -189,16 +190,12 @@ void StoragePool<T>::Rewrite(const int &id,const T &X)
 } 
 template<typename T>
 int StoragePool<T>::Readint(){
-    info.seekp(2*sizeof(int));
-    int x;
-    info.read(reinterpret_cast<char *>(&x),sizeof(int));
-    return x;
+    return BPTint;
 }
 
 template<typename T>
 void StoragePool<T>::Rewriteint(const int &x){
-    info.seekp(2*sizeof(int));
-    info.write(reinterpret_cast<char *>(&x),sizeof(int));    
+    BPTint=x;  
 }
 
 template<typename T>
