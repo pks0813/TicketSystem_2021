@@ -3,7 +3,7 @@ project(code)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_definitions(-O2)
+add_definitions(-Ofast)
 
 add_executable(code
         Storagepool.hpp
