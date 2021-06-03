@@ -374,7 +374,6 @@ StoragePoolPlus<T>::~StoragePoolPlus(){
     info.seekp(0);
     info.write(reinterpret_cast<char *> (&cnt),sizeof(int));
     info.close();
-    // std::cerr<<CI<<std::endl;
 }
 
 #endif

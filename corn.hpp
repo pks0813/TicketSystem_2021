@@ -335,7 +335,7 @@ class Corn{
     Date ArriveTime(const TrainInfo & CurTrain,const int &X){
         return CurTrain.Arrive[X];
     }
-    int STrainVec[50000],TTrainVec[50000],Permu[40000];
+    int STrainVec[20000],TTrainVec[20000],Permu[20000];
     void query_ticket(std::string tmp[]){
         char Sname[31],Tname[31];
         strcpy(Sname,tmp[2].c_str());
@@ -343,7 +343,7 @@ class Corn{
         long long SStationkey=pksHash1(Sname);
         int Sday=StrToDate(tmp[6]);
         int STrainVecsize=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62),STrainVec);
-        static Ticket ans[5000];
+        Ticket ans[5000];
         int ansnum=0;
         for (int i=0;i<STrainVecsize;i++)
         {          
