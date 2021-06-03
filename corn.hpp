@@ -87,7 +87,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",5000),Orderpool("Orderpool.in",10000),Seatpool("Seatpool.in",10000),Stationpool("Stationpool.in",5000),Useronline(10007),MPS(10007)
+            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",5000),Orderpool("Orderpool.in",10000),Seatpool("Seatpool.in",20000),Stationpool("Stationpool.in",5000),Useronline(10007),MPS(1007)
             {
             std::fstream info;
             std::string X="Useless.in";
@@ -490,7 +490,7 @@ class Corn{
                 StationName Station;
                 Stationpool.Copy(STrainVec[ansTrain1],Station);
                 printf("%s %s ",CurTrain.TrainID,tmp[2].c_str());
-                std::cout<<CurTrain.Arrive[ansS1]+(ansDay1*1440+CurTrain.Stoptime[ansS1]);
+                std::   cout<<CurTrain.Arrive[ansS1]+(ansDay1*1440+CurTrain.Stoptime[ansS1]);
                 printf(" -> %s ",Station.Name[ansT1]);
                 std::cout<<CurTrain.Arrive[ansT1]+(ansDay1*1440);
                 int SeatID=TrainSeatBPT.Find(std::make_pair(pksHash1(CurTrain.TrainID),(long long)ansDay1));
