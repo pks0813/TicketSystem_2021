@@ -65,7 +65,7 @@ class BPT{
             auto iter=TREE.lower_bound(keyleft);
             while (iter!=TREE.end() && iter->first<=keyright)  
             {
-                ans[++len]=iter->second;
+                ans[len++]=iter->second;
                 iter++;
             }
             return len;

@@ -10,6 +10,32 @@ inline long long Multi(const long long &a,const long long &b,const long long &Mo
     return   ret;
 }
 
+template<typename T>
+void Qsort(const int &L,const int &R,int P[],T ARR[],bool (*Compare)(const T&,const T&)){
+        int i,j,x;
+        T Midvalue=ARR[P[(L+R)/2]];
+        i=L;j=R;
+        do
+        {
+            while(Compare(ARR[P[i]],Midvalue) && i<=j)
+                i++;
+            while(Compare(Midvalue,ARR[P[j]]) && i<=j)
+                j--;
+            if(i<=j)
+            {
+                x=P[i];
+                P[i]=P[j];
+                P[j]=x;
+                i++;
+                j--;
+            }
+        }while(i<=j); 
+        if (L<j)
+            Qsort(L,j,P,ARR,Compare);
+        if(i<R)
+            Qsort(i,R,P,ARR,Compare);
+}
+
 void hc(int x){std::cerr<<x<<std::endl;}
 const long long mod1=999999999999999989;
 const long long mod2=1ll*19260817*(1e9+7);

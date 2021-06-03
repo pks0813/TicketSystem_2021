@@ -6,31 +6,6 @@ const long long M=1e10;
 int timeID=0;
 int pksuseless;
 int TMPLENGTH;
-template<typename T>
-void Qsort(const int &L,const int &R,int P[],T ARR[],bool (*Compare)(const T&,const T&)){
-        int i,j,x;
-        T Midvalue=ARR[P[(L+R)/2]];
-        i=L;j=R;
-        do
-        {
-            while(Compare(ARR[P[i]],Midvalue) && i<=j)
-                i++;
-            while(Compare(Midvalue,ARR[P[j]]) && i<=j)
-                j--;
-            if(i<=j)
-            {
-                x=P[i];
-                P[i]=P[j];
-                P[j]=x;
-                i++;
-                j--;
-            }
-        }while(i<=j); 
-        if(L<j)
-            Qsort(L,j,P,ARR,Compare);
-        if(i<R)
-            Qsort(i,R,P,ARR,Compare);
-    }
 class Corn{
     public:
     class User{
@@ -419,6 +394,7 @@ class Corn{
         for (int i=0;i<ansnum;i++)
             SC(ans[p[i]]);
     }
+    int STrainVec[20000],TTrainVec[20000];
     const int inf=2e9;
     void query_transfer(std::string tmp[]){
         bool TimePriceflat=0;
@@ -431,28 +407,10 @@ class Corn{
         long long SStationkey=pksHash1(Sname);
         long long TStationkey=pksHash1(Tname);
         int Sday=StrToDate(tmp[6]);
-        sjtu::vector<int> STrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
-        sjtu::vector<int> TTrainVec=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62));
-        static TrainInfo TrainInfoTvec[6000];
-        int Tvecsize=TTrainVec.size();
-        if (Tvecsize>6000)
-        {
-            printf("666");
-            exit(0);
-        }
-        for (int i=0;i<Tvecsize;i++)
-            Trainpool.Copy(TTrainVec[i],TrainInfoTvec[i]);
-            
-        
-        /*sjtu::vector<TrainInfo> TrainInfoTvec;
-        for (int i=0;i<(int)(TTrainVec.size());i++)
-        {
-            TrainInfo x;
-            Trainpool.Copy(TTrainVec[i],x);
-            TrainInfoTvec.push_back(x);
-        }*/ 
+        int STrainVecsize=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62),STrainVec);
+        int TTrainVecsize=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62),TTrainVec);
         int ansTrain1=-1,ansTrain2=-1,ansS1=-1,ansS2=-1,ansT1=-1,ansT2=-1,ansDay1=-1,ansDay2=-1;
-        for (int i=0;i<(int)(STrainVec.size());i++)
+        for (int i=0;i<STrainVecsize;i++)
         {
             MPS.clean();
             TrainInfo CurTrain;
@@ -472,10 +430,11 @@ class Corn{
             if (Neday<CurTrain.Salestart || Neday>CurTrain.Saleending) continue;
             for (int j=Snum+1;j<CurTrain.StationNum;j++)
                 MPS.Insert(std::make_pair(pksHash1(CurTrain.Station[j]),std::make_pair(j,CurTrain.Arrive[j]+Neday*1440)));
-            for (int j=0;j<(int)(TTrainVec.size());j++)
+            for (int j=0;j<TTrainVecsize;j++)
             if (STrainVec[i]!=TTrainVec[j])
             {
-                TrainInfo CurArriveTrain=TrainInfoTvec[j];
+                TrainInfo CurArriveTrain;
+                Trainpool.Copy(TTrainVec[j],CurArriveTrain);
                 int Tnum=-1;
                 for (int k=0;k<CurArriveTrain.StationNum;k++)
                     if (xiangdeng(Tname,CurArriveTrain.Station[k])==1)

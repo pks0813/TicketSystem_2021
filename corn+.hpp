@@ -6,6 +6,31 @@ const long long M=1e10;
 int timeID=0;
 int pksuseless;
 int TMPLENGTH;
+template<typename T>
+void Qsort(const int &L,const int &R,int P[],T ARR[],bool (*Compare)(const T&,const T&)){
+        int i,j,x;
+        T Midvalue=ARR[P[(L+R)/2]];
+        i=L;j=R;
+        do
+        {
+            while(Compare(ARR[P[i]],Midvalue) && i<=j)
+                i++;
+            while(Compare(Midvalue,ARR[P[j]]) && i<=j)
+                j--;
+            if(i<=j)
+            {
+                x=P[i];
+                P[i]=P[j];
+                P[j]=x;
+                i++;
+                j--;
+            }
+        }while(i<=j); 
+        if(L<j)
+            Qsort(L,j,P,ARR,Compare);
+        if(i<R)
+            Qsort(i,R,P,ARR,Compare);
+    }
 class Corn{
     public:
     class User{
@@ -30,17 +55,14 @@ class Corn{
         public:
         char TrainID[22];
         int StationNum;
+        char Station[100][31];
         int Pricepre[100];
-        long long StationHash[100];
         int Seatnumber,Stoptime[100],Salestart,Saleending;
         Date Arrive[100];
         char Type;
         bool Release=0;
         TrainInfo(){}
         ~TrainInfo(){}
-    };
-    class TrainName{
-        char Station[31];
     };
     class Seat{
         public:
@@ -74,30 +96,6 @@ class Corn{
             printf(" %d %d\n",X.price,X.Seatmax);
         }
         
-        friend void Qsort(const int &L,const int &R,int P[],Ticket ARR[],bool (*Compare)(const Ticket&,const Ticket&)){
-            int i,j,x;
-            Ticket Midvalue=ARR[P[(L+R)/2]];
-            i=L;j=R;
-            do
-            {
-                while(Compare(ARR[P[i]],Midvalue) && i<=j)
-                    i++;
-                while(Compare(Midvalue,ARR[P[j]]) && i<=j)
-                    j--;
-                if(i<=j)
-                {
-                    x=P[i];
-                    P[i]=P[j];
-                    P[j]=x;
-                    i++;
-                    j--;
-                }
-            }while(i<=j); 
-            if(L<j)
-                Qsort(L,j,P,ARR,Compare);
-            if(i<R)
-                Qsort(i,R,P,ARR,Compare);
-        }
 
     };
     BPT UserBPT,TrainBPT,StationTrainBPT,UserTimeBPT,TrainTimeBPT,TrainSeatBPT;
@@ -369,7 +367,7 @@ class Corn{
         long long SStationkey=pksHash1(Sname);
         int Sday=StrToDate(tmp[6]);
         sjtu::vector<int> TrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
-        Ticket ans[5000];
+        static Ticket ans[5000];
         int ansnum=0;
         for (int i=0;i<(int)(TrainVec.size());i++)
         {          
@@ -421,8 +419,10 @@ class Corn{
         for (int i=0;i<ansnum;i++)
             SC(ans[p[i]]);
     }
+    char 
     const int inf=2e9;
     void query_transfer(std::string tmp[]){
+        static TrainIDName[6000][21];
         bool TimePriceflat=0;
         if (TMPLENGTH==9 && tmp[8]=="cost") TimePriceflat=1;
         std::pair<Ticket,Ticket> Bestans;
@@ -435,8 +435,13 @@ class Corn{
         int Sday=StrToDate(tmp[6]);
         sjtu::vector<int> STrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
         sjtu::vector<int> TTrainVec=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62));
-        TrainInfo TrainInfoTvec[10000];
+        static TrainInfo TrainInfoTvec[6000];
         int Tvecsize=TTrainVec.size();
+        if (Tvecsize>6000)
+        {
+            printf("666");
+            exit(0);
+        }
         for (int i=0;i<Tvecsize;i++)
             Trainpool.Copy(TTrainVec[i],TrainInfoTvec[i]);
             
@@ -447,7 +452,7 @@ class Corn{
             TrainInfo x;
             Trainpool.Copy(TTrainVec[i],x);
             TrainInfoTvec.push_back(x);
-        }*/
+        }*/ 
         int ansTrain1=-1,ansTrain2=-1,ansS1=-1,ansS2=-1,ansT1=-1,ansT2=-1,ansDay1=-1,ansDay2=-1;
         for (int i=0;i<(int)(STrainVec.size());i++)
         {
