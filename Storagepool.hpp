@@ -7,11 +7,11 @@ template<class T>
 class QQHash{// long long->T
     public:
     int Len;
-    sjtu::vector<int> HasChucun;
-    sjtu::vector<std::pair<long long,T>> *ARR;
+    std::vector<int> HasChucun;
+    std::vector<std::pair<long long,T>> *ARR;
     T Rubish;
     QQHash(const int &len):Len(len){
-        ARR=new sjtu::vector<std::pair<long long,T>>[Len];
+        ARR=new std::vector<std::pair<long long,T>>[Len];
         HasChucun.clear();
     }
     std::pair<long long,T> Find(const long long &X){
@@ -73,7 +73,7 @@ class StoragePool{
 };
 
 template<typename T>
-StoragePool<T>::StoragePool(const std::string &X,const int &Len):File(X),MP(Len*5){
+StoragePool<T>::StoragePool(const std::string &X,const int &Len):File(X),MP(Len){
     Indoor=Len;
     index=new int[Indoor];
     Boo=new bool[Indoor];
@@ -257,7 +257,7 @@ class StoragePoolPlus{
 };
 
 template<typename T>
-StoragePoolPlus<T>::StoragePoolPlus(const std::string &X,const int &Len):File(X),MP(Len*5){
+StoragePoolPlus<T>::StoragePoolPlus(const std::string &X,const int &Len):File(X),MP(Len){
     Indoor=Len;
     index=new int[Indoor];
     Boo=new bool[Indoor];
