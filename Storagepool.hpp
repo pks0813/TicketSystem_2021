@@ -81,7 +81,6 @@ StoragePool<T>::StoragePool(const std::string &X,const int &Len):File(X),MP(Len*
     info.open(X,std::ios::in | std::ios::out | std::ios::binary);
     if (info.fail())
     {
-        printf("6666\n");
         info.clear();
         std::ofstream fout(X);
         fout.close();
