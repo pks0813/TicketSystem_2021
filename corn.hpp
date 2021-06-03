@@ -5,8 +5,32 @@
 const long long M=1e10;
 int timeID=0;
 int pksuseless;
-static 
 int TMPLENGTH;
+template<typename T>
+void Qsort(const int &L,const int &R,int P[],T ARR[],bool (*Compare)(const T&,const T&)){
+        int i,j,x;
+        T Midvalue=ARR[P[(L+R)/2]];
+        i=L;j=R;
+        do
+        {
+            while(Compare(ARR[P[i]],Midvalue) && i<=j)
+                i++;
+            while(Compare(Midvalue,ARR[P[j]]) && i<=j)
+                j--;
+            if(i<=j)
+            {
+                x=P[i];
+                P[i]=P[j];
+                P[j]=x;
+                i++;
+                j--;
+            }
+        }while(i<=j); 
+        if(L<j)
+            Qsort(L,j,P,ARR,Compare);
+        if(i<R)
+            Qsort(i,R,P,ARR,Compare);
+    }
 class Corn{
     public:
     class User{
@@ -72,30 +96,6 @@ class Corn{
             printf(" %d %d\n",X.price,X.Seatmax);
         }
         
-        friend void Qsort(const int &L,const int &R,int P[],Ticket ARR[],bool (*Compare)(const Ticket&,const Ticket&)){
-            int i,j,x;
-            Ticket Midvalue=ARR[P[(L+R)/2]];
-            i=L;j=R;
-            do
-            {
-                while(Compare(ARR[P[i]],Midvalue) && i<=j)
-                    i++;
-                while(Compare(Midvalue,ARR[P[j]]) && i<=j)
-                    j--;
-                if(i<=j)
-                {
-                    x=P[i];
-                    P[i]=P[j];
-                    P[j]=x;
-                    i++;
-                    j--;
-                }
-            }while(i<=j); 
-            if(L<j)
-                Qsort(L,j,P,ARR,Compare);
-            if(i<R)
-                Qsort(i,R,P,ARR,Compare);
-        }
 
     };
     BPT UserBPT,TrainBPT,StationTrainBPT,UserTimeBPT,TrainTimeBPT,TrainSeatBPT;
