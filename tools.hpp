@@ -35,7 +35,7 @@ void Qsort(const int &L,const int &R,int P[],T ARR[],bool (*Compare)(const T&,co
         if(i<R)
             Qsort(i,R,P,ARR,Compare);
 }
-
+    
 void hc(int x){std::cerr<<x<<std::endl;}
 const long long mod1=999999999999999989;
 const long long mod2=1ll*19260817*(1e9+7);
