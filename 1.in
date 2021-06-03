@@ -1,3 +1,4 @@
+clean
 add_user -c cur -u I_am_the_admin -p awsl -n 奥斯卡 -m foo@bar.com -g 10
 login -u I_am_the_admin -p awsl
 add_user -c I_am_the_admin -u Meteor -p bSVa$5h0Iaq_3- -n 流星 -m MANIFESTO.OF@THE.COMMUNIST -g 8

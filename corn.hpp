@@ -5,6 +5,7 @@
 const long long M=1e10;
 int timeID=0;
 int pksuseless;
+static 
 int TMPLENGTH;
 class Corn{
     public:
@@ -366,7 +367,7 @@ class Corn{
         long long SStationkey=pksHash1(Sname);
         int Sday=StrToDate(tmp[6]);
         sjtu::vector<int> TrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
-        Ticket ans[5000];
+        static Ticket ans[5000];
         int ansnum=0;
         for (int i=0;i<(int)(TrainVec.size());i++)
         {          
@@ -432,7 +433,7 @@ class Corn{
         int Sday=StrToDate(tmp[6]);
         sjtu::vector<int> STrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
         sjtu::vector<int> TTrainVec=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62));
-        TrainInfo TrainInfoTvec[6000];
+        static TrainInfo TrainInfoTvec[6000];
         int Tvecsize=TTrainVec.size();
         if (Tvecsize>6000)
         {
