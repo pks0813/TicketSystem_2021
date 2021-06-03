@@ -6,31 +6,6 @@ const long long M=1e10;
 int timeID=0;
 int pksuseless;
 int TMPLENGTH;
-template<typename T>
-void Qsort(const int &L,const int &R,int P[],T ARR[],bool (*Compare)(const T&,const T&)){
-        int i,j,x;
-        T Midvalue=ARR[P[(L+R)/2]];
-        i=L;j=R;
-        do
-        {
-            while(Compare(ARR[P[i]],Midvalue) && i<=j)
-                i++;
-            while(Compare(Midvalue,ARR[P[j]]) && i<=j)
-                j--;
-            if(i<=j)
-            {
-                x=P[i];
-                P[i]=P[j];
-                P[j]=x;
-                i++;
-                j--;
-            }
-        }while(i<=j); 
-        if(L<j)
-            Qsort(L,j,P,ARR,Compare);
-        if(i<R)
-            Qsort(i,R,P,ARR,Compare);
-    }
 class Corn{
     public:
     class User{
@@ -109,7 +84,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",20000),Trainpool("Trainpool.in",5000),Orderpool("Orderpool.in",20000),Seatpool("Seatpool.in",10000),Useronline(200009),MPS(10007)
+            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",3000),Orderpool("Orderpool.in",20000),Seatpool("Seatpool.in",10000),Useronline(200009),MPS(10007)
         {
             std::fstream info;
             std::string X="Useless.in";
@@ -360,19 +335,20 @@ class Corn{
     Date ArriveTime(const TrainInfo & CurTrain,const int &X){
         return CurTrain.Arrive[X];
     }
+    int STrainVec[50000],TTrainVec[50000],Permu[40000];
     void query_ticket(std::string tmp[]){
         char Sname[31],Tname[31];
         strcpy(Sname,tmp[2].c_str());
         strcpy(Tname,tmp[4].c_str());
         long long SStationkey=pksHash1(Sname);
         int Sday=StrToDate(tmp[6]);
-        sjtu::vector<int> TrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
+        int STrainVecsize=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62),STrainVec);
         static Ticket ans[5000];
         int ansnum=0;
-        for (int i=0;i<(int)(TrainVec.size());i++)
+        for (int i=0;i<STrainVecsize;i++)
         {          
             TrainInfo CurTrain;
-            Trainpool.Copy(TrainVec[i],CurTrain);
+            Trainpool.Copy(STrainVec[i],CurTrain);
             Ticket now;
             int Snum=-1;
             for (int j=0;j<CurTrain.StationNum;j++)
@@ -409,20 +385,17 @@ class Corn{
             now.price=CurTrain.Pricepre[Tnum]-CurTrain.Pricepre[Snum];
             ans[ansnum++]=now;
         }
-        int p[5000];
         printf("%d\n",ansnum);
         if (ansnum==0) return;
-        for (int i=0;i<ansnum;i++) p[i]=i;
+        for (int i=0;i<ansnum;i++) Permu[i]=i;
         if (TMPLENGTH==9 && tmp[8]=="cost")
-        Qsort(0,ansnum-1,p,ans,PriceCompare);
-        else Qsort(0,ansnum-1,p,ans,TimeCompare);
+        Qsort(0,ansnum-1,Permu,ans,PriceCompare);
+        else Qsort(0,ansnum-1,Permu,ans,TimeCompare);
         for (int i=0;i<ansnum;i++)
-            SC(ans[p[i]]);
+            SC(ans[Permu[i]]);
     }
-    char 
     const int inf=2e9;
     void query_transfer(std::string tmp[]){
-        static TrainIDName[6000][21];
         bool TimePriceflat=0;
         if (TMPLENGTH==9 && tmp[8]=="cost") TimePriceflat=1;
         std::pair<Ticket,Ticket> Bestans;
@@ -433,28 +406,10 @@ class Corn{
         long long SStationkey=pksHash1(Sname);
         long long TStationkey=pksHash1(Tname);
         int Sday=StrToDate(tmp[6]);
-        sjtu::vector<int> STrainVec=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62));
-        sjtu::vector<int> TTrainVec=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62));
-        static TrainInfo TrainInfoTvec[6000];
-        int Tvecsize=TTrainVec.size();
-        if (Tvecsize>6000)
-        {
-            printf("666");
-            exit(0);
-        }
-        for (int i=0;i<Tvecsize;i++)
-            Trainpool.Copy(TTrainVec[i],TrainInfoTvec[i]);
-            
-        
-        /*sjtu::vector<TrainInfo> TrainInfoTvec;
-        for (int i=0;i<(int)(TTrainVec.size());i++)
-        {
-            TrainInfo x;
-            Trainpool.Copy(TTrainVec[i],x);
-            TrainInfoTvec.push_back(x);
-        }*/ 
+        int STrainVecsize=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62),STrainVec);
+        int TTrainVecsize=StationTrainBPT.Findinterval(std::make_pair(TStationkey,-1),std::make_pair(TStationkey,1ll<<62),TTrainVec);
         int ansTrain1=-1,ansTrain2=-1,ansS1=-1,ansS2=-1,ansT1=-1,ansT2=-1,ansDay1=-1,ansDay2=-1;
-        for (int i=0;i<(int)(STrainVec.size());i++)
+        for (int i=0;i<STrainVecsize;i++)
         {
             MPS.clean();
             TrainInfo CurTrain;
@@ -474,10 +429,11 @@ class Corn{
             if (Neday<CurTrain.Salestart || Neday>CurTrain.Saleending) continue;
             for (int j=Snum+1;j<CurTrain.StationNum;j++)
                 MPS.Insert(std::make_pair(pksHash1(CurTrain.Station[j]),std::make_pair(j,CurTrain.Arrive[j]+Neday*1440)));
-            for (int j=0;j<(int)(TTrainVec.size());j++)
+            for (int j=0;j<TTrainVecsize;j++)
             if (STrainVec[i]!=TTrainVec[j])
             {
-                TrainInfo CurArriveTrain=TrainInfoTvec[j];
+                TrainInfo CurArriveTrain;
+                Trainpool.Copy(TTrainVec[j],CurArriveTrain);
                 int Tnum=-1;
                 for (int k=0;k<CurArriveTrain.StationNum;k++)
                     if (xiangdeng(Tname,CurArriveTrain.Station[k])==1)
@@ -613,12 +569,12 @@ class Corn{
         long long Userkey=pksHash1(tmp[2].c_str());
         auto Useriter=Useronline.Find(Userkey);
         if (Useriter.first==-1) {printf("-1\n");return;}
-        sjtu::vector<int> Q=UserTimeBPT.Findinterval(std::make_pair(Userkey,-1),std::make_pair(Userkey,Ordertime+1));
-        printf("%d\n",(int)Q.size());
-        for (int i=(int)(Q.size())-1;i>=0;i--)
+        int OrderSize=UserTimeBPT.Findinterval(std::make_pair(Userkey,-1),std::make_pair(Userkey,Ordertime+1),Permu);
+        printf("%d\n",OrderSize);
+        for (int i=OrderSize-1;i>=0;i--)
         {
             Order Curorder;
-            Orderpool.Copy(Q[i],Curorder);
+            Orderpool.Copy(Permu[i],Curorder);
             if (Curorder.type=='P') printf("[pending]");
             if (Curorder.type=='S') printf("[success]");
             if (Curorder.type=='R') printf("[refunded]");
@@ -634,19 +590,19 @@ class Corn{
         long long Userkey=pksHash1(tmp[2].c_str());
         auto Useriter=Useronline.Find(Userkey);
         if (Useriter.first==-1) {printf("-1\n");return;}
-        sjtu::vector<int> Q=UserTimeBPT.Findinterval(std::make_pair(Userkey,-1),std::make_pair(Userkey,Ordertime+1));
+        int OrderSize=UserTimeBPT.Findinterval(std::make_pair(Userkey,-1),std::make_pair(Userkey,Ordertime+1),Permu);
         int x=1;
         if (TMPLENGTH==5) x=StrToInt(tmp[4]);
-        x=(int)Q.size()-x;
-        if (x<0 || x>=(int)Q.size()) {printf("-1\n");return;}
+        x=OrderSize-x;
+        if (x<0 || x>=OrderSize) {printf("-1\n");return;}
         Order Curorder;
-        Orderpool.Copy(Q[x],Curorder);
+        Orderpool.Copy(Permu[x],Curorder);
         if (Curorder.type=='R') {printf("-1\n");return;}
         if (Curorder.type=='P') 
         {
             printf("0\n");
             Curorder.type='R';  
-            Orderpool.Rewrite(Q[x],Curorder);
+            Orderpool.Rewrite(Permu[x],Curorder);
             pksuseless=TrainTimeBPT.Erase(std::make_pair(pksHash1(Curorder.TrainName),Curorder.Day*M+Curorder.time)); 
             return;
         }
@@ -654,7 +610,7 @@ class Corn{
         {
             printf("0\n");
             Curorder.type='R';
-            Orderpool.Rewrite(Q[x],Curorder); 
+            Orderpool.Rewrite(Permu[x],Curorder); 
             long long Trainkey=pksHash1(Curorder.TrainName);
             int SeatID=TrainSeatBPT.Find(std::make_pair(Trainkey,(long long)Curorder.Day));
             Seat TrainSeat;

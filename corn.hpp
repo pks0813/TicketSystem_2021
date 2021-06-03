@@ -617,8 +617,9 @@ class Corn{
             Seatpool.Copy(SeatID,TrainSeat);
             for (int i=Curorder.SStation;i<Curorder.TStation;i++) 
                 TrainSeat.A[i]+=Curorder.Num;
-            sjtu::vector<int> Ordervec=TrainTimeBPT.Findinterval(std::make_pair(Trainkey,Curorder.Day*M-1),std::make_pair(Trainkey,Curorder.Day*M+Ordertime+1));
-            for (int i=0;i<(int)(Ordervec.size());i++)
+            int Ordervec[20000];
+            int OrdervecSize=TrainTimeBPT.Findinterval(std::make_pair(Trainkey,Curorder.Day*M-1),std::make_pair(Trainkey,Curorder.Day*M+Ordertime+1),Ordervec);
+            for (int i=0;i<OrdervecSize;i++)
             {
                 Order NowOrder;
                 Orderpool.Copy(Ordervec[i],NowOrder);
