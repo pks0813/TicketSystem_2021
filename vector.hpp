@@ -342,7 +342,7 @@ namespace sjtu {
         void clear() {
             clear_literally();
             this->length = 0;
-            this->capacity = 10;
+            this->capacity = 2;
             this->data = new T *[this->capacity];
         }
         /**
