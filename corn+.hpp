@@ -84,7 +84,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",3000),Orderpool("Orderpool.in",20000),Seatpool("Seatpool.in",10000),Useronline(200009),MPS(10007)
+            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",5000),Orderpool("Orderpool.in",10000),Seatpool("Seatpool.in",10000),Useronline(10007),MPS(10007)
         {
             std::fstream info;
             std::string X="Useless.in";
@@ -335,7 +335,7 @@ class Corn{
     Date ArriveTime(const TrainInfo & CurTrain,const int &X){
         return CurTrain.Arrive[X];
     }
-    int STrainVec[50000],TTrainVec[50000],Permu[40000];
+    int STrainVec[20000],TTrainVec[20000],Permu[20000];
     void query_ticket(std::string tmp[]){
         char Sname[31],Tname[31];
         strcpy(Sname,tmp[2].c_str());
@@ -343,7 +343,7 @@ class Corn{
         long long SStationkey=pksHash1(Sname);
         int Sday=StrToDate(tmp[6]);
         int STrainVecsize=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62),STrainVec);
-        static Ticket ans[5000];
+        Ticket ans[5000];
         int ansnum=0;
         for (int i=0;i<STrainVecsize;i++)
         {          
@@ -617,8 +617,9 @@ class Corn{
             Seatpool.Copy(SeatID,TrainSeat);
             for (int i=Curorder.SStation;i<Curorder.TStation;i++) 
                 TrainSeat.A[i]+=Curorder.Num;
-            sjtu::vector<int> Ordervec=TrainTimeBPT.Findinterval(std::make_pair(Trainkey,Curorder.Day*M-1),std::make_pair(Trainkey,Curorder.Day*M+Ordertime+1));
-            for (int i=0;i<(int)(Ordervec.size());i++)
+            int Ordervec[20000];
+            int OrdervecSize=TrainTimeBPT.Findinterval(std::make_pair(Trainkey,Curorder.Day*M-1),std::make_pair(Trainkey,Curorder.Day*M+Ordertime+1),Ordervec);
+            for (int i=0;i<OrdervecSize;i++)
             {
                 Order NowOrder;
                 Orderpool.Copy(Ordervec[i],NowOrder);
