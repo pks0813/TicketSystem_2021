@@ -12,21 +12,21 @@ class QQHash{// long long->T
         std::pair<long long,T> value;
         Zhizhen *nex;
         Zhizhen():nex(nullptr){}
-        Zhizhen(const std::pair<long long,T> &X,Zhizhen *Y):value(X),nex(Y){}
+        Zhizhen(const std::pair<long long,T> &X,Zhizhen *Y):value(X),nex(Y){}   
     };
     int Len;
     Zhizhen **ARR;
     T Rubish;
     QQHash(const int &len):Len(len){
         ARR=new Zhizhen*[Len];
-        for (int i=0;i<len;i++) ARR[i]=nullptr;
+        for (int i=0;i<Len;i++) ARR[i]=nullptr;
     }
     std::pair<long long,T> Find(const long long &X){
         int ID=X%Len;
-        for (auto iter=ARR[ID];iter!=nullptr;iter=iter->nex)
+        for (Zhizhen* iter=ARR[ID];iter!=nullptr;iter=iter->nex)
         if ((iter->value).first==X)
             return iter->value;
-        return std::make_pair(-1,Rubish);      
+        return std::make_pair(-1ll,Rubish);      
     }
     void Erase(const long long &X){
         int ID=X%Len;
@@ -39,7 +39,7 @@ class QQHash{// long long->T
             return;
         }
 
-        for (auto Iter=ARR[ID];Iter->nex!=nullptr;Iter++)
+        for (auto Iter=ARR[ID];Iter->nex!=nullptr;Iter=Iter->nex)
         {
             if (((Iter->nex->value).first)==X)
             {
@@ -51,7 +51,7 @@ class QQHash{// long long->T
         }
     }
     void Insert(const std::pair<long long ,T> &X){
-        int ID=X.first%Len;    
+        int ID=X.first%Len;
         Zhizhen *Iter=new Zhizhen(X,ARR[ID]);
         ARR[ID]=Iter;
     }
