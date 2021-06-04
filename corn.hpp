@@ -10,7 +10,7 @@ class Corn{
     public:
     class User{
         public:
-        char Username[22],Password[31],Name[16],MailAddr[31];
+        char Username[21],Password[31],Name[16],MailAddr[31];
         int Privilege;
         User( const char _Username[],
         const char _Password[],
@@ -87,7 +87,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",5000),Orderpool("Orderpool.in",20000),Seatpool("Seatpool.in",10000),Stationpool("Stationpool.in",4000),Useronline(10007),MPS(107)
+            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",10000),Orderpool("Orderpool.in",20000),Seatpool("Seatpool.in",10000),Stationpool("Stationpool.in",4000),Useronline(10007),MPS(107)
             {
             std::fstream info;
             std::string X="Useless.in";
