@@ -118,8 +118,8 @@ class Corn{
         info.write(reinterpret_cast<char *> (&Usernumber),sizeof(int));
         info.write(reinterpret_cast<char *> (&Ordertime),sizeof(int));  
         info.close();
-        for (auto i=MP.begin();i!=MP.end();i++)
-            std::cerr<<i->first<<' '<<i->second<<std::endl;
+        // for (auto i=MP.begin();i!=MP.end();i++)
+            // std::cerr<<i->first<<' '<<i->second<<std::endl;
     }
     //UserController
     void add_user(std::string tmp[]){
@@ -360,7 +360,7 @@ class Corn{
         long long TStationkey=pksHash1(Tname);
         int Sday=StrToDate(tmp[6]);
         int STrainVecsize=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62),STrainVec);
-        Ticket ans[3000];
+        Ticket ans[5000];
         int ansnum=0;
         for (int i=0;i<STrainVecsize;i++)
         {          
@@ -660,9 +660,9 @@ class Corn{
         UserBPT.clean();TrainBPT.clean();StationTrainBPT.clean();UserTimeBPT.clean();TrainTimeBPT.clean();
         Ordertime=0;Usernumber=0;
     }
-    std::map<std::string,long long> MP;
+    // std::map<std::string,long long> MP;
     void game(){
-        int last=clock();
+        // int last=clock();
         std::string S;
         while (1){
             // printf("%d   ",++timeID);
@@ -687,9 +687,9 @@ class Corn{
             if (tmp[0]=="refund_ticket"){refund_ticket(tmp);}
             if (tmp[0]=="clean"){clean();}
             if (tmp[0]=="exit"){printf("bye\n");return;}
-            int now=clock();
-            MP[tmp[0]]=MP[tmp[0]]+now-last;
-            last=now;
+            // int now=clock();
+            // MP[tmp[0]]=MP[tmp[0]]+now-last;
+            // last=now;
             }
         }
 

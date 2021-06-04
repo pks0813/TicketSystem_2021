@@ -23,7 +23,8 @@ class pksBPT{
     void dfsinsert(const int &l,const int &r){
         if (l>r) return;
         int mid=(l+r)/2;
-        Insert(arr[mid].first,arr[mid].second);
+        int x=Insert(arr[mid].first,arr[mid].second);
+        if(x==-1) exit(0);
         dfsinsert(l,mid-1);
         dfsinsert(mid+1,r);
     }
@@ -116,7 +117,7 @@ class pksBPT{
         nowKeyright=Keyright;
         nowans=ans;
         if (root!=nullptr)
-        dfs(root,std::pair<long long,long long>(-10000,-100000),std::pair<long long ,long long>(8e18,8e18));
+        dfs(root,std::pair<long long,long long>(-1000000,-10000000),std::pair<long long ,long long>(8e18,8e18));
         // std::cerr<<"size"<<size<<std::endl;
         return size;
     }
