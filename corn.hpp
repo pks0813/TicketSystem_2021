@@ -10,7 +10,7 @@ class Corn{
     public:
     class User{
         public:
-        char Username[22],Password[31],Name[21],MailAddr[31];
+        char Username[22],Password[31],Name[16],MailAddr[31];
         int Privilege;
         User( const char _Username[],
         const char _Password[],
@@ -28,7 +28,7 @@ class Corn{
     };
     class TrainInfo{
         public:
-        char TrainID[22];
+        char TrainID[21];
         int StationNum;
         long long StationHash[100];
         int Pricepre[100];
@@ -47,7 +47,7 @@ class Corn{
         public:
         int Day;//起始站的Day
         int TrainID;
-        char TrainName[22];
+        char TrainName[21];
         int SStation,TStation;
         char SStationName[31],TStationName[31];
         Date Sdate,Tdate;
@@ -57,7 +57,7 @@ class Corn{
     };
     class Ticket{
         public:
-        char TrainID[22];
+        char TrainID[21];
         Date SDate,TDate;
         char Sname[31],Tname[31];
         int price,time,Seatmax;
@@ -87,7 +87,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",5000),Orderpool("Orderpool.in",20000),Seatpool("Seatpool.in",1000),Stationpool("Stationpool.in",4000),Useronline(10007),MPS(107)
+            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",5000),Orderpool("Orderpool.in",20000),Seatpool("Seatpool.in",10000),Stationpool("Stationpool.in",4000),Useronline(10007),MPS(107)
             {
             std::fstream info;
             std::string X="Useless.in";
@@ -348,7 +348,7 @@ class Corn{
     Date ArriveTime(const TrainInfo & CurTrain,const int &X){
         return CurTrain.Arrive[X];
     }
-    int STrainVec[20000],TTrainVec[20000],Permu[20000];
+    int STrainVec[15000],TTrainVec[15000],Permu[15000];
     void query_ticket(std::string tmp[]){
         char Sname[31],Tname[31];
         strcpy(Sname,tmp[2].c_str());
