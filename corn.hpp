@@ -88,7 +88,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),
-            Userpool("Userpool.in",10000)/*1M*/,Trainpool("Trainpool.in",5000)/*10M*/,Orderpool("Orderpool.in",15000)/*2M*/,Seatpool("Seatpool.in",10000)/*4M*/,Stationpool("Stationpool.in",3000)/*9M*/,Useronline(10007),MPS(107)
+            Userpool("Userpool.in",10000)/*1M*/,Trainpool("Trainpool.in",5000)/*10M*/,Orderpool("Orderpool.in",15000)/*2M*/,Seatpool("Seatpool.in",15000)/*6M*/,Stationpool("Stationpool.in",2000)/*6M*/,Useronline(10007),MPS(107)
             {
             std::fstream info;
             std::string X="Useless.in";
@@ -360,7 +360,7 @@ class Corn{
         long long TStationkey=pksHash1(Tname);
         int Sday=StrToDate(tmp[6]);
         int STrainVecsize=StationTrainBPT.Findinterval(std::make_pair(SStationkey,-1),std::make_pair(SStationkey,1ll<<62),STrainVec);
-        Ticket ans[5000];
+        Ticket ans[3000];
         int ansnum=0;
         for (int i=0;i<STrainVecsize;i++)
         {          
