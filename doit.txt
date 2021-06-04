@@ -12,7 +12,7 @@ time ./code <9.in >9.out
 time ./code <10.in >10.out
 ./compare
 
-git commit -a -m "QQhash Final "
+git commit -a -m "Changesize Final "
 git push
 
 

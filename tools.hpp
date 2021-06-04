@@ -8,6 +8,7 @@ inline long long Multi(const long long &a,const long long &b,const long long &Mo
     long long ret=a*b-d*Mod;
     if(ret<0)   ret+=Mod;
     return   ret;
+    // return (__int128)a*(__int128)b%(__int128)Mod;
 }
 
 template<typename T>
