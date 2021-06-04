@@ -115,6 +115,7 @@ class pksBPT{
         nowKeyleft=Keyleft;
         nowKeyright=Keyright;
         nowans=ans;
+        if (root!=nullptr)
         dfs(root,std::pair<long long,long long>(-10000,-100000),std::pair<long long ,long long>(8e18,8e18));
         // std::cerr<<"size"<<size<<std::endl;
         return size;
