@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include "Storagepool.hpp"
-const int Huancun=3000;
+const int Huancun=300;
 /*
  * max_size此B+树的度数
  * 除根结点外所有节点的孩子数量k满足 (max_size + 1) / 2 <= k <= max_size
@@ -18,7 +18,7 @@ const int Huancun=3000;
  * 每个数据块的记录数量[(max_size + 1) / 2, max_size]
  * 所有叶节点顺序连成一个单链表
  */
-const int max_size = 50, min_size = (max_size + 1) / 2;
+const int max_size = 30, min_size = (max_size + 1) / 2;
 
 class BPT {
 private:
