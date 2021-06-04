@@ -3,45 +3,67 @@
 #include"include.hpp"
 extern int sumCheck;
 int CI=0;
+
 template<class T>
 class QQHash{// long long->T
     public:
+    class Zhizhen{
+        public:
+        std::pair<long long,T> value;
+        Zhizhen *nex;
+        Zhizhen():nex(nullptr){}
+        Zhizhen(const std::pair<long long,T> &X,Zhizhen *Y):value(X),nex(Y){}
+    };
     int Len;
-    sjtu::vector<int> HasChucun;
-    sjtu::vector<std::pair<long long,T>> *ARR;
+    Zhizhen **ARR;
     T Rubish;
     QQHash(const int &len):Len(len){
-        ARR=new sjtu::vector<std::pair<long long,T>>[Len];
-        HasChucun.clear();
+        ARR=new Zhizhen*[Len];
+        for (int i=0;i<len;i++) ARR[i]=nullptr;
     }
     std::pair<long long,T> Find(const long long &X){
         int ID=X%Len;
-        for (int i=0;i<ARR[ID].size();i++)
-        if (ARR[ID][i].first==X)
-            return ARR[ID][i];
+        for (auto iter=ARR[ID];iter!=nullptr;iter=iter->nex)
+        if ((iter->value).first==X)
+            return iter->value;
         return std::make_pair(-1,Rubish);      
     }
     void Erase(const long long &X){
         int ID=X%Len;
-        for (auto Iter=ARR[ID].begin();Iter!=ARR[ID].end();Iter++)
+        if (ARR[ID]!=nullptr && (ARR[ID]->value).first==X)
         {
-            if (((*Iter).first)==X)
+            Zhizhen *last=ARR[ID];
+            ARR[ID]=ARR[ID]->nex;
+            delete last;
+            return;
+        }
+        for (auto Iter=ARR[ID];Iter->nex!=nullptr;Iter++)
+        {
+            if (((Iter->nex->value).first)==X)
             {
-                ARR[ID].erase(Iter);
+                Zhizhen *last=Iter->nex;
+                Iter->nex=last->nex;
+                delete last;
                 return;
             }
         }
     }
     void Insert(const std::pair<long long ,T> &X){
-        int ID=X.first%Len;  
-        if (ARR[ID].empty()) HasChucun.push_back(ID);      
-        ARR[ID].push_back(X);
+        int ID=X.first%Len;    
+        Zhizhen *Iter=new Zhizhen(X,ARR[ID]);
+        ARR[ID]=Iter;
     }
     void clean(){
-        for (int i=0;i<HasChucun.size();i++) ARR[HasChucun[i]].clear();
-        HasChucun.clear();
+        for (int i=0;i<Len;i++)
+        while (ARR[i]!=nullptr)
+        {
+            Zhizhen *last=ARR[i];
+            ARR[i]=last->nex;
+            delete last;
+        }
     }
     ~QQHash(){
+        clean();
         delete []ARR;
     }
 };
