@@ -90,7 +90,7 @@ class Corn{
     Corn():UserBPT("UserBPT.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),
             // Userpool("Userpool.in",1)/*1M*/,Trainpool("Trainpool.in",1)/*10M*/,Orderpool("Orderpool.in",1)/*2M*/,Seatpool("Seatpool.in",1)/*6M*/,Stationpool("Stationpool.in",1)/*6M*/,Useronline(10007),MPS(107)
-            Userpool("Userpool.in",8000)/*1M*/,Trainpool("Trainpool.in",8000)/*14M*/,Orderpool("Orderpool.in",10000)/*2M*/,Seatpool("Seatpool.in",10000)/*6M*/,Stationpool("Stationpool.in",3000)/*6M*/,Useronline(10007),MPS(107)
+            Userpool("Userpool.in",8000)/*1M*/,Trainpool("Trainpool.in",10000)/*14M*/,Orderpool("Orderpool.in",10000)/*2M*/,Seatpool("Seatpool.in",15000)/*6M*/,Stationpool("Stationpool.in",3000)/*6M*/,Useronline(10007),MPS(107)
             
             {
             std::fstream info;
@@ -246,8 +246,7 @@ class Corn{
         now.Type=tmp[20][0];
         int CurID=Trainpool.Insert(now);
         int CurID2=Stationpool.Insert(Station);
-        // std::cerr<<CurID<<' '<<CurID2<<std::endl;
-        if (CurID2!=CurID) {hc(timeID);exit(0);}
+        // std::cerr<<CurID<<' '<<CurID2<<std::endl; 
         std::pair<long long,long long> key(pksHash(now.TrainID));
         int flat=TrainBPT.Insert(key,CurID);
         if (flat==-1) {printf("-1\n");Trainpool.Erase(CurID);Stationpool.Erase(CurID);}
