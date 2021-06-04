@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include "Storagepool.hpp"
-const int Huancun=1000;
+const int Huancun=1400;
 /*
  * max_size此B+树的度数
  * 除根结点外所有节点的孩子数量k满足 (max_size + 1) / 2 <= k <= max_size
