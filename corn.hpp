@@ -77,7 +77,7 @@ class Corn{
         public:
         char Name[100][31];
     };
-    pksBPT UserBPT,TrainBPT,StationTrainBPT,UserTimeBPT,TrainTimeBPT;
+    BPT UserBPT,TrainBPT,StationTrainBPT,UserTimeBPT,TrainTimeBPT;
     StoragePoolPlus<User> Userpool;
     StoragePool<TrainInfo> Trainpool;
     StoragePoolPlus<Order> Orderpool;
