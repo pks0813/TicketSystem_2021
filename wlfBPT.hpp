@@ -18,7 +18,7 @@ const int Huancun=800;
  * 每个数据块的记录数量[(max_size + 1) / 2, max_size]
  * 所有叶节点顺序连成一个单链表
  */
-const int max_size = 100, min_size = (max_size + 1) / 2;
+const int max_size = 200, min_size = (max_size + 1) / 2;
 
 class BPT {
 private:
