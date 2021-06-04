@@ -1,6 +1,4 @@
 #include "include.hpp"
-int sumCheck;
-Corn::TrainInfo TrainInfoTvec[6000];   
 int main(){
     {
         Corn pks;

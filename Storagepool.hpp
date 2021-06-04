@@ -39,7 +39,7 @@ class QQHash{// long long->T
             return;
         }
 
-        for (auto Iter=ARR[ID];Iter->nex!=nullptr;Iter=Iter->nex)
+        for (Zhizhen *Iter=ARR[ID];Iter->nex!=nullptr;Iter=Iter->nex)
         {
             if (((Iter->nex->value).first)==X)
             {
@@ -270,12 +270,9 @@ class StoragePoolPlus{
     int NowDele;
     StoragePoolPlus(const std::string &X,const int &len);
     int Insert(const T &X);
-    void Erase(const int &id);
     void Copy(const int &id,T &X);
     void InsideRewrite(const int &id,const T &X);
     void Rewrite(const int &id,const T &X);
-    int Readint();
-    void Rewriteint(const int &x);
     void clean();
     ~StoragePoolPlus();
 };
@@ -363,19 +360,6 @@ void StoragePoolPlus<T>::Rewrite(const int &id,const T &X)
     MP.Insert(std::make_pair((long long)(index[NowDele]),NowDele));
     NowDele=(NowDele+1)%Indoor;
 } 
-template<typename T>
-int StoragePoolPlus<T>::Readint(){
-    info.seekp(2*sizeof(int));
-    int x;
-    info.read(reinterpret_cast<char *>(&x),sizeof(int));
-    return x;
-}
-
-template<typename T>
-void StoragePoolPlus<T>::Rewriteint(const int &x){
-    info.seekp(2*sizeof(int));
-    info.write(reinterpret_cast<char *>(&x),sizeof(int));    
-}
 
 template<typename T>
 void StoragePoolPlus<T>::clean(){
