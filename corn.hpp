@@ -516,7 +516,7 @@ class Corn{
         else printf("0\n");
     }
 
-    void    _ticket(std::string tmp[]){
+    void    buy_ticket(std::string tmp[]){
         long long Userkey=pksHash1(tmp[2].c_str());
         Order CurOrder;
         auto Curiter=Useronline.Find(Userkey);
