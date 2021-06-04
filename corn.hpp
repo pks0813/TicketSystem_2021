@@ -87,7 +87,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",9000),Orderpool("Orderpool.in",15000),Seatpool("Seatpool.in",8000),Stationpool("Stationpool.in",5000),Useronline(10007),MPS(107)
+            Userpool("Userpool.in",20000),Trainpool("Trainpool.in",9000),Orderpool("Orderpool.in",10000),Seatpool("Seatpool.in",8000),Stationpool("Stationpool.in",5000),Useronline(10007),MPS(107)
             {
             std::fstream info;
             std::string X="Useless.in";
@@ -114,6 +114,8 @@ class Corn{
         info.write(reinterpret_cast<char *> (&Usernumber),sizeof(int));
         info.write(reinterpret_cast<char *> (&Ordertime),sizeof(int));  
         info.close();
+        for (auto i=MP.begin();i!=MP.end();i++)
+            std::cerr<<i->first<<' '<<i->second<<std::endl;
     }
     //UserController
     void add_user(std::string tmp[]){
@@ -677,7 +679,7 @@ class Corn{
     }
     std::map<std::string,long long> MP;
     void game(){
-        // int last=clock();
+        int last=clock();
         std::string S;
         while (1){
             // printf("%d   ",++timeID);
@@ -702,9 +704,9 @@ class Corn{
             if (tmp[0]=="refund_ticket"){refund_ticket(tmp);}
             if (tmp[0]=="clean"){clean();}
             if (tmp[0]=="exit"){printf("bye\n");return;}
-            // int now=clock();
-            // MP[tmp[0]]=MP[tmp[0]]+now-last;
-            // last=now;
+            int now=clock();
+            MP[tmp[0]]=MP[tmp[0]]+now-last;
+            last=now;
             }
         }
 
