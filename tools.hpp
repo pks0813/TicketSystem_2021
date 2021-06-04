@@ -88,15 +88,6 @@ int StringCompare(const char S1[],const char S2[]){
     }
     return 0;
 }
-bool xiangdeng(const char S1[],const char S2[])
-{
-    for (int i=0;;i++)
-    {
-        if (S1[i]!=S2[i]) return 0;
-        if (S1[i]=='\0') return 1;
-    }
-    return 0;
-}
 int StrToInt(const std::string &S)
 {
     int x=0,len=(int)(S.length());
@@ -159,15 +150,5 @@ struct Date{
         return os;
 	}
 };
-void SC(const std::string &X){
-    std::cout<<X<<"\n";
-}
-/*
-const int MX=50000;
-template<typename T>
-class Hash{//long long -->T
-    sjtu::vector<T> ARR;
-    
-    
-}*/
+
 #endif

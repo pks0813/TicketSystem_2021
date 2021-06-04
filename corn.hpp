@@ -1,3 +1,4 @@
+
 #ifndef CORN_HPP
 #define CORN_HPP
 
@@ -76,7 +77,7 @@ class Corn{
         public:
         char Name[100][31];
     };
-    BPT UserBPT,TrainBPT,StationTrainBPT,UserTimeBPT,TrainTimeBPT;
+    pksBPT UserBPT,TrainBPT,StationTrainBPT,UserTimeBPT,TrainTimeBPT;
     StoragePoolPlus<User> Userpool;
     StoragePool<TrainInfo> Trainpool;
     StoragePoolPlus<Order> Orderpool;
@@ -86,7 +87,7 @@ class Corn{
     QQHash<std::pair<int,Date>> MPS;
     int Usernumber=0;
     int Ordertime=0;
-    Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
+    Corn():UserBPT("UserBPT.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),
             // Userpool("Userpool.in",1)/*1M*/,Trainpool("Trainpool.in",1)/*10M*/,Orderpool("Orderpool.in",1)/*2M*/,Seatpool("Seatpool.in",1)/*6M*/,Stationpool("Stationpool.in",1)/*6M*/,Useronline(10007),MPS(107)
             Userpool("Userpool.in",8000)/*1M*/,Trainpool("Trainpool.in",4000)/*10M*/,Orderpool("Orderpool.in",10000)/*2M*/,Seatpool("Seatpool.in",10000)/*6M*/,Stationpool("Stationpool.in",1500)/*6M*/,Useronline(10007),MPS(107)
@@ -349,9 +350,6 @@ class Corn{
     static bool TimeCompare(const Ticket &X1,const Ticket &X2){
         if (X1.time!=X2.time) return X1.time<X2.time;
         return StringCompare(X1.TrainID,X2.TrainID)==-1;
-    }
-    Date ArriveTime(const TrainInfo & CurTrain,const int &X){
-        return CurTrain.Arrive[X];
     }
     int STrainVec[15000],TTrainVec[15000],Permu[15000];
     void query_ticket(std::string tmp[]){

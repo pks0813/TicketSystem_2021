@@ -37,7 +37,8 @@ class BPT{
         int Insert(const std::pair<long long,long long> &key,const int &ID){
             if (TREE.find(key)!=TREE.end()) return -1;
             num++;
-            TREE[key]=ID;return 0;        }
+            TREE[key]=ID;return 0;
+            }
         int Erase(const std::pair<long long,long long> &key){
             auto iter=TREE.find(key);
             if (iter==TREE.end()) return -1;

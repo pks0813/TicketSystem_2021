@@ -25,7 +25,7 @@ class QQHash{// long long->T
         int ID=X%Len;
         for (Zhizhen* iter=ARR[ID];iter!=nullptr;iter=iter->nex)
         if ((iter->value).first==X)
-            return iter->value;
+            return iter->value; 
         return std::make_pair(-1ll,Rubish);      
     }
     void Erase(const long long &X){

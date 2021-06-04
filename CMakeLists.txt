@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 add_definitions(-Ofast)
 
 add_executable(code
+        map.hpp
         Storagepool.hpp
         include.hpp
         tools.hpp
