@@ -1,11 +1,15 @@
 //
-// Created by Snoopy on 2021/6/5.
+// Created by Snoopy on 2021/5/19.
 //
+// 如果插入重复元素要不要报错？
+// 好家伙，到时候可得查一遍有没有改完忘了写到文件里的
 
 #ifndef WLFBPT_HPP
 #define WLFBPT_HPP
+
 #include <iostream>
 #include "Storagepool.hpp"
+const int Huancun=300;
 /*
  * max_size此B+树的度数
  * 除根结点外所有节点的孩子数量k满足 (max_size + 1) / 2 <= k <= max_size
@@ -14,7 +18,7 @@
  * 每个数据块的记录数量[(max_size + 1) / 2, max_size]
  * 所有叶节点顺序连成一个单链表
  */
-const int max_size = 10, min_size = (max_size + 1) / 2;
+const int max_size = 30, min_size = (max_size + 1) / 2;
 
 class BPT {
 private:
@@ -195,13 +199,13 @@ private:
                             node1.value[i + node1.length] = node2.value[i];
                         }
                         node1.length += node2.length;
-                        node1.next = node2.next;
                         storage.Rewrite(value[sub], node1);
                         storage.Erase(value[sub + 1]);
                         for (int i = sub + 1; i < length; ++i) {
                             key[i] = key[i + 1];
                             value[i] = value[i + 1];
                         }
+                        node1.next = node2.next;
                         --length;
                         return;
                     } else {
@@ -290,7 +294,7 @@ private:
             else {
                 bpt_node node1;
                 storage.Copy(node.value[sub_tree], node1);
-                if (node1.length == min_size - 1) {
+                if (node1.length == min_size) {
                     node.merge(sub_tree, storage);
                     storage.Rewrite(t, node);
                 }
@@ -344,10 +348,13 @@ private:
         return node.next;
     }
 public:
-    BPT(const std::string &f_n) :storage(f_n,100){
+    BPT(const std::string &f_n) :storage(f_n,Huancun){
         root = storage.Readint();
     }
-
+    void clean(){
+        storage.clean();
+        root=-1;
+    }
     /*
      * 成功返回0， 失败返回-1
      * todo 检查通过1
@@ -454,9 +461,64 @@ public:
         }
         return i;
     }
-    void clean(){
-        storage.clean();
-        root=-1;
+   /* void show_tree() {
+        if (root == -1) return;
+        bpt_node tmp;
+        std::queue<int> node_queue;
+        node_queue.push(root);
+        while (!node_queue.empty()) {
+            int a = node_queue.front();
+            node_queue.pop();
+            storage.Copy(a, tmp);
+            std::cout << "node:\n" << "length: " << tmp.length << " type: " << tmp.type << std::endl;
+            if (tmp.type == 0) {
+                std::cout << "keys: ";
+                for (int i = 1; i < tmp.length; ++i) {
+                    std::cout << tmp.key[i].first << '_' << tmp.key[i].second << ' ';
+                }
+                std::cout << std::endl << "value: ";
+                for (int i = 0; i < tmp.length; ++i) {
+                    std::cout << tmp.value[i] << ' ';
+                }
+                std::cout << std::endl;
+            } else {
+                std::cout << "key: ";
+                for (int i = 1; i <= tmp.length; ++i) {
+                    std::cout << tmp.key[i].first << '_' << tmp.key[i].second << ' ';
+                }
+                std::cout << std::endl << "value: ";
+                for (int i = 1; i <= tmp.length; ++i) {
+                    std::cout << tmp.value[i] << ' ';
+                }
+                std::cout << std::endl;
+            }
+            if (tmp.type == 0) {
+                for (int i = 0; i < tmp.length; ++i) {
+                    node_queue.push(tmp.value[i]);
+                }
+            }
+        }
     }
+*//*
+    void show_leaves() {
+        if (root == -1) return;
+        bpt_node node;
+        std::queue<int> node_queue;
+        node_queue.push(root);
+        while (!node_queue.empty()) {
+            storage.Copy(node_queue.front(), node);
+            node_queue.pop();
+            if (node.type == 0) {
+                for (int i = 0; i < node.length; ++i) node_queue.push(node.value[i]);
+            } else {
+                printf("node:\nkey:\n");
+                for (int i = 1; i <= node.length; ++i) printf("%d_%d ", node.key[i].first, node.key[i].second);
+                printf("\nvalue:\n");
+                for (int i = 1; i <= node.length; ++i) printf("%d ", node.value[i]);
+                printf("\nnext: %d\n", node.next);
+            }
+        }
+    }*/
 };
-#endif //TICKETSYSTEM_2021_BPT_SUBMIT_HPP
+
+#endif //TICKETSYSTEM_2021_BPT_HPP
