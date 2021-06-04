@@ -90,7 +90,7 @@ class Corn{
     Corn():UserBPT("UserBPT.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),
             // Userpool("Userpool.in",1)/*1M*/,Trainpool("Trainpool.in",1)/*10M*/,Orderpool("Orderpool.in",1)/*2M*/,Seatpool("Seatpool.in",1)/*6M*/,Stationpool("Stationpool.in",1)/*6M*/,Useronline(10007),MPS(107)
-            Userpool("Userpool.in",8000)/*1M*/,Trainpool("Trainpool.in",7000)/*14M*/,Orderpool("Orderpool.in",10000)/*2M*/,Seatpool("Seatpool.in",10000)/*6M*/,Stationpool("Stationpool.in",1500)/*6M*/,Useronline(10007),MPS(107)
+            Userpool("Userpool.in",8000)/*1M*/,Trainpool("Trainpool.in",7500)/*14M*/,Orderpool("Orderpool.in",10000)/*2M*/,Seatpool("Seatpool.in",10000)/*6M*/,Stationpool("Stationpool.in",1500)/*6M*/,Useronline(10007),MPS(107)
             
             {
             std::fstream info;
