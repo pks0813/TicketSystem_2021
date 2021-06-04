@@ -30,13 +30,15 @@ class QQHash{// long long->T
     }
     void Erase(const long long &X){
         int ID=X%Len;
-        if (ARR[ID]!=nullptr && (ARR[ID]->value).first==X)
+        if (ARR[ID]==nullptr) return;
+        if ((ARR[ID]->value).first==X)
         {
             Zhizhen *last=ARR[ID];
             ARR[ID]=ARR[ID]->nex;
             delete last;
             return;
         }
+
         for (auto Iter=ARR[ID];Iter->nex!=nullptr;Iter++)
         {
             if (((Iter->nex->value).first)==X)
