@@ -88,7 +88,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),
-            Userpool("Userpool.in",10000)/*1M*/,Trainpool("Trainpool.in",5000)/*10M*/,Orderpool("Orderpool.in",15000)/*2M*/,Seatpool("Seatpool.in",15000)/*6M*/,Stationpool("Stationpool.in",2000)/*6M*/,Useronline(10007),MPS(107)
+            Userpool("Userpool.in",10000)/*1M*/,Trainpool("Trainpool.in",4000)/*10M*/,Orderpool("Orderpool.in",15000)/*2M*/,Seatpool("Seatpool.in",15000)/*6M*/,Stationpool("Stationpool.in",2000)/*6M*/,Useronline(10007),MPS(107)
             {
             std::fstream info;
             std::string X="Useless.in";
@@ -516,7 +516,7 @@ class Corn{
         else printf("0\n");
     }
 
-    void buy_ticket(std::string tmp[]){
+    void    _ticket(std::string tmp[]){
         long long Userkey=pksHash1(tmp[2].c_str());
         Order CurOrder;
         auto Curiter=Useronline.Find(Userkey);
