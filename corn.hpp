@@ -10,19 +10,19 @@ class Corn{
     public:
     class User{
         public:
-        char Username[21],Password[31],Name[16],MailAddr[31];
-        int Privilege;
-        User( const char _Username[],
+        char Username[21],Name[16],MailAddr[31];
+        long long PassWordHash;
+        int Privilege=0;
+        /*User( const char _Username[],
         const char _Password[],
         const char _Name[],
         const char _MailAddr[],
-            int _Privilege):Privilege(_Privilege)
+            int _Privilege):Privilege(_Privilege),PassWordHash(pksHash1(_Password))
         {
             strcpy(Username,_Username);
-            strcpy(Password,_Password);
             strcpy(Name,_Name);
             strcpy(MailAddr,_MailAddr);
-        }
+        }*/
         User(){}
         ~User(){}
     };
@@ -88,8 +88,8 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),
-            Userpool("Userpool.in",1)/*1M*/,Trainpool("Trainpool.in",1)/*10M*/,Orderpool("Orderpool.in",1)/*2M*/,Seatpool("Seatpool.in",1)/*6M*/,Stationpool("Stationpool.in",1)/*6M*/,Useronline(10007),MPS(107)
-            //  Userpool("Userpool.in",8000)/*1M*/,Trainpool("Trainpool.in",4000)/*10M*/,Orderpool("Orderpool.in",10000)/*2M*/,Seatpool("Seatpool.in",10000)/*6M*/,Stationpool("Stationpool.in",1500)/*6M*/,Useronline(10007),MPS(107)
+            // Userpool("Userpool.in",1)/*1M*/,Trainpool("Trainpool.in",1)/*10M*/,Orderpool("Orderpool.in",1)/*2M*/,Seatpool("Seatpool.in",1)/*6M*/,Stationpool("Stationpool.in",1)/*6M*/,Useronline(10007),MPS(107)
+            Userpool("Userpool.in",8000)/*1M*/,Trainpool("Trainpool.in",4000)/*10M*/,Orderpool("Orderpool.in",10000)/*2M*/,Seatpool("Seatpool.in",10000)/*6M*/,Stationpool("Stationpool.in",1500)/*6M*/,Useronline(10007),MPS(107)
             
             {
             std::fstream info;
@@ -127,7 +127,7 @@ class Corn{
         auto Curiter=Useronline.Find(Q);
         if (Usernumber!=0 && Curiter.first==-1) {printf("-1\n");return;}
         strcpy(tem.Username,tmp[4].c_str());
-        strcpy(tem.Password,tmp[6].c_str());
+        tem.PassWordHash=pksHash1(tmp[6].c_str());
         strcpy(tem.Name,tmp[8].c_str());
         strcpy(tem.MailAddr,tmp[10].c_str());
         tem.Privilege=StrToInt(tmp[12]);
@@ -158,7 +158,7 @@ class Corn{
         if (IDcur==-1) {printf("-1\n");return;}
         User Curuser;
         Userpool.Copy(IDcur,Curuser);
-        if (xiangdeng(tmp[4].c_str(),Curuser.Password)==0) printf("-1\n");
+        if (pksHash1(tmp[4].c_str())!=Curuser.PassWordHash) printf("-1\n");
         else{
             Useronline.Insert(std::make_pair(Q.first,IDcur));
             printf("0\n");
@@ -200,7 +200,7 @@ class Corn{
         if (Curuser.Privilege<=Queuser.Privilege && IDCur!=IDQue) {printf("-1\n");return;}
         for (int i=6;i<TMPLENGTH;i+=2)
         {
-            if (tmp[i-1][1]=='p') strcpy(Queuser.Password,tmp[i].c_str());
+            if (tmp[i-1][1]=='p') Queuser.PassWordHash=pksHash1(tmp[i].c_str());
             if (tmp[i-1][1]=='n') strcpy(Queuser.Name,tmp[i].c_str());
             if (tmp[i-1][1]=='m') strcpy(Queuser.MailAddr,tmp[i].c_str());
             if (tmp[i-1][1]=='g') 
