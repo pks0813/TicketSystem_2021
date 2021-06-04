@@ -8,11 +8,8 @@
 #define WLFBPT_HPP
 
 #include <iostream>
-#include <vector>
-#include <assert.h>
 #include "Storagepool.hpp"
-#include <queue>
-const int Huancun=500;
+const int Huancun=3000;
 /*
  * max_size此B+树的度数
  * 除根结点外所有节点的孩子数量k满足 (max_size + 1) / 2 <= k <= max_size
@@ -39,7 +36,6 @@ private:
          * todo 2021/5/31 检查合格
          */
         int data_insert(const Key &_key, int _value) {
-            assert(type == 1);
             int hole, i;
             //找到插入的位置
             for (i = 1; i <= length; ++i) {
@@ -65,7 +61,6 @@ private:
          * todo 2021/5/31 检查合格
          */
         void index_insert(int offset, int id, StoragePool<bpt_node> &storage){
-            assert(type == 0);
             bpt_node new_node;
             storage.Copy(id, new_node);
             for (int i = length - 1; i > offset; --i) {
@@ -82,7 +77,6 @@ private:
          * todo 2021/5/31 检查合格
          */
         int data_erase(const Key &_key) {
-            assert(type == 1);
             int hole = data_locate(_key);
             if (hole == -1) return -1;
             else {
@@ -110,7 +104,6 @@ private:
          * todo 注意,这个函数将会直接在文件里修改value[]的信息,但是(*this)仍然没有被修改!
          */
         void merge(int sub, StoragePool<bpt_node> &storage) {
-            assert(type == 0);
             bpt_node node1, node2;
             storage.Copy(value[sub], node1);
             if (node1.type == 0) {
@@ -238,7 +231,6 @@ private:
          * todo 2021/5/31 检查通过
          */
         int find_subtree(const Key &_key) const{
-            assert(type == 0);
             for (int i = 1; i <= length - 1; ++i) {
                 if (_key >= key[i]) continue;
                 else return i - 1;
@@ -250,7 +242,6 @@ private:
          * todo 2021/5/31 检查通过
          */
         int data_locate(const Key &_key) const{
-            assert(type == 1);
             int left = 1, right = length, mid;
             while (left <= right) {
                 mid = (left + right) >> 1;
@@ -326,7 +317,6 @@ private:
     int split_index_node(int t){
         bpt_node node, new_node;
         storage.Copy(t, node);
-        assert(node.type == 0);
         new_node.type = 0;
         new_node.length = node.length - min_size;
         for (int i = 0; i < node.length - min_size; ++i) {
@@ -345,7 +335,6 @@ private:
     int split_data_node(int t) {
         bpt_node node, new_node;
         storage.Copy(t, node);
-        assert(node.type == 1);
         new_node.type = 1;
         new_node.length = node.length - min_size;
         for (int i = 1; i <= node.length - min_size; ++i) {
