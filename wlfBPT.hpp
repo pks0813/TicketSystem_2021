@@ -397,7 +397,7 @@ public:
         else {
             bpt_node node;
             storage.Copy(root, node);
-            if (node.length == 1){
+            if (node.length == 1 && node.type == 0){
                 int new_root = node.value[0];
                 storage.Erase(root);
                 root = new_root;
