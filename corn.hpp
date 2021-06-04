@@ -87,7 +87,7 @@ class Corn{
     int Ordertime=0;
     Corn():UserBPT("User.in"),TrainBPT("TrainBPT.in"),StationTrainBPT("StationTrainBPT.in"),UserTimeBPT("UserTimeBPT.in"),
             TrainTimeBPT("TrainTimeBPT.in"),TrainSeatBPT("TrainSeatBPT.in"),
-            Userpool("Userpool.in",1),Trainpool("Trainpool.in",1),Orderpool("Orderpool.in",1),Seatpool("Seatpool.in",1),Stationpool("Stationpool.in",1),Useronline(10007),MPS(107)
+            Userpool("Userpool.in",10000),Trainpool("Trainpool.in",3000),Orderpool("Orderpool.in",10000),Seatpool("Seatpool.in",5000),Stationpool("Stationpool.in",2000),Useronline(10007),MPS(107)
             {
             std::fstream info;
             std::string X="Useless.in";
