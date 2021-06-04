@@ -10,6 +10,5 @@ add_executable(code
         include.hpp
         tools.hpp
         BPT.hpp
-        vector.hpp
         main.cpp
         corn.hpp)
