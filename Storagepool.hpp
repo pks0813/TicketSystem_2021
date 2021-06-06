@@ -3,27 +3,26 @@
 #include"include.hpp"
 extern int sumCheck;
 int CI=0;
-
 template<class T>
 class QQHash{// long long->T
     public:
-    class Zhizhen{
+    class Node{
         public:
         std::pair<long long,T> value;
-        Zhizhen *nex;
-        Zhizhen():nex(nullptr){}
-        Zhizhen(const std::pair<long long,T> &X,Zhizhen *Y):value(X),nex(Y){}   
+        Node *nex;
+        Node():nex(nullptr){}
+        Node(const std::pair<long long,T> &X,Node *Y):value(X),nex(Y){}   
     };
     int Len;
-    Zhizhen **ARR;
+    Node **ARR;
     T Rubish;
     QQHash(const int &len):Len(len){
-        ARR=new Zhizhen*[Len];
+        ARR=new Node*[Len];
         for (int i=0;i<Len;i++) ARR[i]=nullptr;
     }
     std::pair<long long,T> Find(const long long &X){
         int ID=X%Len;
-        for (Zhizhen* iter=ARR[ID];iter!=nullptr;iter=iter->nex)
+        for (Node* iter=ARR[ID];iter!=nullptr;iter=iter->nex)
         if ((iter->value).first==X)
             return iter->value; 
         return std::make_pair(-1ll,Rubish);      
@@ -33,17 +32,17 @@ class QQHash{// long long->T
         if (ARR[ID]==nullptr) return;
         if ((ARR[ID]->value).first==X)
         {
-            Zhizhen *last=ARR[ID];
+            Node *last=ARR[ID];
             ARR[ID]=ARR[ID]->nex;
             delete last;
             return;
         }
 
-        for (Zhizhen *Iter=ARR[ID];Iter->nex!=nullptr;Iter=Iter->nex)
+        for (Node *Iter=ARR[ID];Iter->nex!=nullptr;Iter=Iter->nex)
         {
             if (((Iter->nex->value).first)==X)
             {
-                Zhizhen *last=Iter->nex;
+                Node *last=Iter->nex;
                 Iter->nex=last->nex;
                 delete last;
                 return;
@@ -52,14 +51,14 @@ class QQHash{// long long->T
     }
     void Insert(const std::pair<long long ,T> &X){
         int ID=X.first%Len;
-        Zhizhen *Iter=new Zhizhen(X,ARR[ID]);
+        Node *Iter=new Node(X,ARR[ID]);
         ARR[ID]=Iter;
     }
     void clean(){
         for (int i=0;i<Len;i++)
         while (ARR[i]!=nullptr)
         {
-            Zhizhen *last=ARR[i];
+            Node *last=ARR[i];
             ARR[i]=last->nex;
             delete last;
         }
@@ -73,6 +72,8 @@ class QQHash{// long long->T
 
 template <typename T>
 class StoragePool{
+    private:
+    void InsideRewrite(const int &id,const T &X);
     public:
     int Indoor;
     std::fstream info;
@@ -88,7 +89,6 @@ class StoragePool{
     int Insert(const T &X);
     void Erase(const int &id);
     void Copy(const int &id,T &X);
-    void InsideRewrite(const int &id,const T &X);
     void Rewrite(const int &id,const T &X);
     int Readint();
     void Rewriteint(const int &x);

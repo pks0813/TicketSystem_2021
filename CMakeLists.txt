@@ -12,4 +12,4 @@ add_executable(code
         tools.hpp
         BPT.hpp
         main.cpp
-        corn.hpp)
+        core.hpp)

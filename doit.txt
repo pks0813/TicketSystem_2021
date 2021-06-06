@@ -12,7 +12,7 @@ time ./code <9.in >9.out
 time ./code <10.in >10.out
 ./compare
 
-git commit -a -m "Try size "
+git commit -a -m "Name update"
 git push
  
 

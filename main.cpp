@@ -1,7 +1,7 @@
-#include "include.hpp"
+#include "core.hpp"
 int main(){
     {
-        Corn pks;
+        core pks;
         pks.game();
     }
 
