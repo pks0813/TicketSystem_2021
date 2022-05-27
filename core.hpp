@@ -245,9 +245,10 @@ class core{
         now.Saleending=StrToDate(Q[1]);
         now.Type=tmp[20][0];
         int CurID=Trainpool.Insert(now);
+        int CurID2=Stationpool.Insert(Station);
         std::pair<long long,long long> key(pksHash(now.TrainID));
         int flat=TrainBPT.Insert(key,CurID);
-        if (flat==-1) {printf("-1\n");Trainpool.Erase(CurID);Stationpool.Erase(CurID);}
+        if (flat==-1) {printf("-1\n");Trainpool.Erase(CurID);Stationpool.Erase(CurID2);}
         else printf("0\n");
     }
     void delete_train(){
